@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/users', UserApiController::class);
+Route::get('/users', [UserApiController::class, 'getProfile'])->middleware('myauth');
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
