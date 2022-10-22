@@ -19,6 +19,11 @@ class Account extends Authenticatable implements JWTSubject
         'password',
     ];
 
+    public function setAccount($req)
+    {
+        return DB::insert('insert into accounts (user_id, email,password) values (?, ?)', [$req["user_id"], $req["email"], $req["password"]]);
+    }
+
     public function getEmail()
     {
         return $this->email;
