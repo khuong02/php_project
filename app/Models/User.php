@@ -9,10 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+    private $id, $username, $cost, $email;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +34,12 @@ class User extends Authenticatable implements JWTSubject
     public function getByID($id)
     {
         return DB::select('select * from users where id = ?', [$id]);
+    }
+
+    public function updateUserName($data)
+    {
+
+        return DB::update('update users set username = ?, cost = ? where id = ?', [$data->username, $data->cost, $data->id]);
     }
 
     public function getJWTIdentifier()

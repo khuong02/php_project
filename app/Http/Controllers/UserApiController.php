@@ -16,4 +16,28 @@ class UserApiController extends Controller
             'data' => $user->getById($id)[0]
         ], 200);
     }
+
+    public function updateProfile(Request $request)
+    {
+        try {
+            $user = new User();
+            $id = $request->get('user_id');
+            $data = $user->getById($id)[0];
+
+            $data->username = $request->get('username');
+            $data->cost = $request->get('cost');
+
+            $user->updateUserName($data);
+
+            return response()->json([
+                'status' => 200,
+                'message' => "update successfully!"
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => 500,
+                "message" => "update failed!"
+            ], 500);
+        }
+    }
 }
