@@ -29,6 +29,11 @@ class User extends Authenticatable implements JWTSubject
         return DB::insert('insert into users (username, email) values (?, ?)', [$req["username"], $req["email"]]);
     }
 
+    public function getByID($id)
+    {
+        return DB::select('select * from users where id = ?', [$id]);
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
