@@ -74,18 +74,16 @@ class AuthController extends Controller
                 'cf_password' => 'min:3'
             ]);
 
-            $user = new User();
-            $account = new Account();
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+            ]);
 
-            $user->setProfile($request);
-
-            $req = [
-                "user_id" => $user->id,
-                "email" => $request->email,
-                "password" => $request->password,
-            ];
-
-            $account->setAccount($req);
+            $account = Account::create([
+                'user_id' => $user->id,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
             $token = Auth::login($account);
             return response()->json([
