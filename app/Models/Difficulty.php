@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class Difficulty extends Model
@@ -13,4 +14,9 @@ class Difficulty extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function getDifficultyByID($id)
+    {
+        return DB::select('select * from table_difficulties where id = ?', [$id]);
+    }
 }
