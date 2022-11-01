@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\PasswordResetRequestController;
+
 use App\Http\Controllers\ChangePasswordController;
 
 
@@ -34,4 +35,4 @@ Route::controller(AuthController::class)->group(function () {
 
 
 Route::post('/reset-password-request', [PasswordResetRequestController::class, 'sendPasswordResetEmail']);
-Route::post('/change-password', [ChangePasswordController::class, 'passwordResetProcess']);
+// Route::post('/change-password', [PasswordResetRequestController::class, 'passwordResetProcess']);
