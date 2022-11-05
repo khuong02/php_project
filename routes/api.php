@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\PasswordResetRequestController;
 
@@ -24,15 +25,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/users', [UserApiController::class, 'getProfile'])->middleware('myauth');
 Route::post('/users', [UserApiController::class, 'updateProfile'])->middleware('myauth');
+Route::post('/users/settings', [UserApiController::class, 'updateSetting'])->middleware('myauth');
 
-Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer']);
+Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer'])->middleware('myauth');
+
+Route::get('/quizz', [TopicController::class, 'getTopics'])->middleware('myauth');
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
-    Route::post('verify','verify');
+    Route::post('verify', 'verify');
 });
 
 Route::post('/reset-password-request', [PasswordResetRequestController::class, 'sendPasswordResetEmail']);
-    Route::post('/change-password', [PasswordResetRequestController::class, 'passwordResetProcess']);
-});
+Route::post('/change-password', [PasswordResetRequestController::class, 'passwordResetProcess']);
