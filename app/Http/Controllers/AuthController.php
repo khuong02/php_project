@@ -9,13 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Kreait\Firebase\Factory;
 
 class AuthController extends Controller
 {
     //
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','verify']]);
     }
 
     public function login(Request $request)
@@ -41,6 +42,9 @@ class AuthController extends Controller
                 'password' => $request->password,
                 'user_id' => +$account->user_id,
             ];
+
+            JWTAuth::factory()->setTTL(60 * 24 * 365);
+
             $token = Auth::guard('account_api')->attempt($credentials);
             if (!$token) {
                 return response()->json([
@@ -85,6 +89,8 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
+            JWTAuth::factory()->setTTL(60 * 24 * 365);
+
             $token = Auth::login($account);
             return response()->json([
                 'status' => 200,
@@ -100,5 +106,42 @@ class AuthController extends Controller
                 'message' => $err->getMessage(),
             ], 400);
         }
+    }
+
+    public function verify(Request $request){
+        $factory = (new Factory)->withServiceAccount('/Users/longtran/Downloads/project-7053e-firebase-adminsdk-3orve-b9769b67dd.json');
+        $auth = $factory->createAuth();
+        
+        $idToken = $request->header('authorization');
+
+        try {
+            $verifiedIdToken = $auth->verifyIdToken($idToken);
+        } catch (FailedToVerifyToken $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+
+        $uname = $verifiedIdToken->claims()->get('name');
+        $email = $verifiedIdToken->claims()->get('email');
+        $image = $verifiedIdToken->claims()->get('picture');
+
+        $userModel = new User();
+        $user = $userModel->findUserByEmail($email);
+        if(!isset($user->email)){
+            $user = User::create([
+                "username"=>$uname,
+                "email"=>$email,
+                "avatar"=>$image,
+            ]);
+        }
+        $customToken = $auth->createCustomToken($user->id,[],'P365D');
+        $customTokenString = $customToken->toString();
+
+        return response()->json([
+            'status' => 200,
+            'token' => $customTokenString,
+        ], 200);
     }
 }

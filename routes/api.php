@@ -30,9 +30,9 @@ Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer']);
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
+    Route::post('verify','verify');
 });
 
-
-
 Route::post('/reset-password-request', [PasswordResetRequestController::class, 'sendPasswordResetEmail']);
-// Route::post('/change-password', [PasswordResetRequestController::class, 'passwordResetProcess']);
+    Route::post('/change-password', [PasswordResetRequestController::class, 'passwordResetProcess']);
+});
