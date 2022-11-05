@@ -41,6 +41,9 @@ class AuthController extends Controller
                 'password' => $request->password,
                 'user_id' => +$account->user_id,
             ];
+
+            JWTAuth::factory()->setTTL(60 * 24 * 365);
+
             $token = Auth::guard('account_api')->attempt($credentials);
             if (!$token) {
                 return response()->json([
@@ -84,6 +87,8 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
+
+            JWTAuth::factory()->setTTL(60 * 24 * 365);
 
             $token = Auth::login($account);
             return response()->json([
