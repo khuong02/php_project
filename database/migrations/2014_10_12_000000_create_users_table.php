@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('roles')->default(1);
             $table->string('cost')->default(5000);
+            $table->string('avatar')->nullable(true);
             $table->timestamps();
         });
     }

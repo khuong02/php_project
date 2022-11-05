@@ -11,7 +11,8 @@
         "php": "^8.0.2",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.0",
+        "kreait/laravel-firebase": "^4.2",
+        "laravel/framework": "^8.83.23",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
         "php-open-source-saver/jwt-auth": "^2.0"
@@ -20,7 +21,7 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
+        "nunomaduro/collision": "^5.11.0",
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0",
         "bangnokia/laravel-serve-livereload": "^1.1",
