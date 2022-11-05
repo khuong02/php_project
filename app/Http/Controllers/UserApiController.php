@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserSetting;
 use Illuminate\Http\Request;
 
 class UserApiController extends Controller
@@ -28,6 +29,27 @@ class UserApiController extends Controller
             $data->cost = $request->get('cost');
 
             $user->updateUserName($data);
+
+            return response()->json([
+                'status' => 200,
+                'message' => "update successfully!"
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => 500,
+                "message" => "update failed!"
+            ], 500);
+        }
+    }
+
+    public function updateSetting(Request $request)
+    {
+        try {
+            $setting = new UserSetting();
+            $id = $request->get('user_id');
+            $mode = $request->get('mode') | 0;
+
+            $setting->setUserSetting($id, $mode);
 
             return response()->json([
                 'status' => 200,

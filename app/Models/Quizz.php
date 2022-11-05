@@ -19,4 +19,15 @@ class Quizz extends Model
     {
         return DB::select('select * from table_quizzes where id = ?', [$quizz_id]);
     }
+
+    public function getList($page, $limit)
+    {
+        return DB::select(
+            'select *
+            from table_quizzes
+            limit ?
+            offset ?',
+            [$limit, $page - 1]
+        );
+    }
 }
