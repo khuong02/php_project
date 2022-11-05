@@ -25,6 +25,5 @@ Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer']);
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
+    Route::post('verify','verify');
 });
-
-Route::post('/verifies',[FirebaseController::class,'verifyToken']);
