@@ -22,12 +22,8 @@ Route::get('/',function (){
 
 
 Route::get('/change-password/{token}',[ChangePasswordController::class,'getFormResetPassword'] );
-
 Route::post('/change-password', [ChangePasswordController::class,'passwordReset'])->name('change-password');
 
-// Route::post('/change-password',function(){
-//     return 'thanh cong';
-// } );
 // $controller_path = 'App\Http\Controllers';
 
 // Main Page Route

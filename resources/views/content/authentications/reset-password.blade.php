@@ -29,8 +29,7 @@
             @csrf
             <div class="mb-3">
               <input type="hidden" name ="token" id="token" value = "{{$token}}" >
-              <label for="email" class="form-label">Email</label>
-              <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" autofocus>
+              <input type="hidden" name ="email" id="email" value = "{{$email}}" >
               <label for="password" class="form-label">Password</label>
               <input type="text" class="form-control" id="password" name="password" placeholder="Enter your new password" autofocus>
             </div>
