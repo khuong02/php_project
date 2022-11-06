@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Kreait\Firebase\Factory;
 
 class PasswordResetRequestController extends Controller
 {
 
     public function sendPasswordResetEmail(Request $request)
     {
+       
+
         // If email does not exist
         if (!$this->validEmail($request->email)) {
             return response()->json([
@@ -22,10 +26,10 @@ class PasswordResetRequestController extends Controller
             ], Response::HTTP_NOT_FOUND);
         } else {
             // If email exists
-            if ($this->checkAccountResset($request)->count() > 0) {
+            if ($this->checkAccountResset($request)->count() > 0) {               
                 return response()->json(['message' => 'The account has requested a password reset. Please check your email again'], Response::HTTP_OK);
             } else {
-                $this->sendMail($request->email);
+                $this->sendMail($request);
                 return response()->json([
                     'message' => 'Check your inbox, we have sent a link to reset email.',
                 ], Response::HTTP_OK);
@@ -33,11 +37,13 @@ class PasswordResetRequestController extends Controller
         }
     }
 
-    public function sendMail($email)
+    public function sendMail($request)
     {
-        $token = $this->generateToken($email);
-        Mail::to($email)->send(new SendMail($token, $email));
+        $token = $this->generateJwtToken($request);
+        Mail::to($request->email)->send(new SendMail($token));
     }
+
+
     public function validEmail($email)
     {
         return !!User::where('email', $email)->first();
@@ -50,12 +56,20 @@ class PasswordResetRequestController extends Controller
         ]);
     }
 
-    // public function generateJwtToken($email, $token)
-    // {
-    //     $customClaims = ['email' => $email, '$token' => $this->generateToken($email)];
-    //     $payload = JWTFactory::make($customClaims);
-    //     return JWTAuth::encode($payload);
-    // }
+    public function generateJwtToken($request)
+    {
+        $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN','D:\Workspace\laravel\php_project\serviceAccount.json'));
+        $auth = $factory->createAuth();
+
+
+
+        $user = User::where( ['email' => $request->email])->first();
+
+        $customClaims = ['email' => $request->email,'roles' => $request->roles, '$token' => $this->generateToken($request->email)];
+        $customToken = $auth->createCustomToken($user->id, $customClaims, 'PT5M');
+        $customTokenString = $customToken->toString();
+        return $customTokenString;
+    }
 
     public function generateToken($email)
     {

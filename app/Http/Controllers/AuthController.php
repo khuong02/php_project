@@ -118,7 +118,7 @@ class AuthController extends Controller
 
     public function verify(Request $request)
     {
-        $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN'));
+        $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN','D:\Workspace\laravel\php_project\serviceAccount.json'));
         $auth = $factory->createAuth();
 
         $idToken = $request->header('authorization');

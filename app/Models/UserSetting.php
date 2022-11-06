@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class UserSetting extends Model
 {
+
     use HasFactory;
+
+    public $table = "table_user_settings";
     protected $fillable = [
         'user_id',
         'mode'

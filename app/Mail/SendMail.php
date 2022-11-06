@@ -18,7 +18,6 @@ class SendMail extends Mailable
     public function __construct($token, $email)
     {
         $this->token = $token;
-        $this->email = $email;
     }
     /**
      * Build the message.
@@ -28,8 +27,7 @@ class SendMail extends Mailable
     public function build()
     {
         return $this->markdown('Email.resetPassword')->with([
-            'token' => $this->token,
-            'email' => $this->email,
+            'token' => $this->token
         ]);
     }
 }
