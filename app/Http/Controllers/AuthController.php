@@ -79,7 +79,7 @@ class AuthController extends Controller
                 'password' => 'min:3|required_with:cf_password|same:cf_password',
                 'cf_password' => 'min:3'
             ]);
-
+            $setting = new UserSetting();
 
 
             $user = User::create([
@@ -87,9 +87,7 @@ class AuthController extends Controller
                 'email' => $request->email,
             ]);
 
-            UserSetting::create([
-                'user_id' => $user->id,
-            ]);
+            $setting->setUserSetting($user->id);
 
             $account = Account::create([
                 'user_id' => $user->id,
