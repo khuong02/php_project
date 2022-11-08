@@ -11,14 +11,13 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Kreait\Firebase\Factory;
+use Firebase\JWT\JWT;
 
 class PasswordResetRequestController extends Controller
 {
-
     public function sendPasswordResetEmail(Request $request)
     {
        
-
         // If email does not exist
         if (!$this->validEmail($request->email)) {
             return response()->json([
@@ -58,17 +57,35 @@ class PasswordResetRequestController extends Controller
 
     public function generateJwtToken($request)
     {
-        $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN','D:\Workspace\laravel\php_project\serviceAccount.json'));
-        $auth = $factory->createAuth();
+        //tiến hành đọc file serviceAccount
+        $serviceAccount  = json_decode(file_get_contents(storage_path()."/serviceAccount.json"),true);
+        //lấy account email
+        $service_account_email = $serviceAccount["client_email"];
+        //lấy private key
+        $private_key = $serviceAccount["private_key"];
 
-
+        $now_seconds = time();
 
         $user = User::where( ['email' => $request->email])->first();
 
-        $customClaims = ['email' => $request->email,'roles' => $request->roles, '$token' => $this->generateToken($request->email)];
-        $customToken = $auth->createCustomToken($user->id, $customClaims, 'PT5M');
-        $customTokenString = $customToken->toString();
-        return $customTokenString;
+
+        $customClaims = [];
+
+        $payload = array(
+            "iss" => $service_account_email,
+            "sub" => $service_account_email,
+            "aud" => "https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit",
+            "iat" => $now_seconds,
+            "exp" => $now_seconds+(60*60),  // Maximum expiration time is one hour
+            "uid" => $user->id,
+            "claims" => array(
+                'email' => $request->email,
+                'roles' => $request->roles, 
+                'token' => $this->generateToken($request->email)
+            )
+        );
+        $jwtToken = JWT::encode($payload, $private_key, "HS256");
+        return $jwtToken;
     }
 
     public function generateToken($email)

@@ -8,52 +8,58 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class ChangePasswordController extends Controller
 {
-    private $verifyTokenId;
+
+    private $decoded;
 
     public function getFormResetPassword(Request $request, $token)
     {
         return View('content.authentications.reset-password', ['token' => $token]);
     }
 
-
     public function passwordReset(Request $request)
     {
-        dd($request);
+        // dd($request);
         if($this->verifyJwtToken($request)){ 
-            if($verifyTokenId->CustomToken()->get('roles') == "0"){
-                $this->resetPasswordUser($verifyTokenId->CustomToken()->get('email'),$request->password,$verifyTokenId->CustomToken()->get('token'));
+            if($this->decoded->claims->roles == "0"){
+                $this->resetPasswordUser($this->decoded->claims->email,$request->password,$this->decoded->claims->token);
+                return View('content.authentications.reset-password-success');
             }else{
-                $this->resetPasswordAdmin($verifyTokenId->CustomToken()->get('email'),$request->password,$verifyTokenId->CustomToken()->get('token'));
+                $this->resetPasswordAdmin($this->decoded->claims->email,$request->password,$this->decoded->claims->token);
+                return View('content.authentications.reset-password-success');
             }
         }else{
             $this->tokenNotFoundError();
-        }
-        // return $this->verifyJwtToken($request) ? $this->resetPassword($request) : 
+        }      
     }
 
 
     private function verifyJwtToken($request){
         $result = false;
 
-        $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN','D:\Workspace\laravel\php_project\serviceAccount.json'));
-        $auth = $factory->createAuth();
-        $tokenId = $request->token;
+        $serviceAccount  = json_decode(file_get_contents(storage_path()."/serviceAccount.json"),true);
+        //lấy account email
+        $service_account_email = $serviceAccount["client_email"];
+        //lấy private key
+        $private_key = $serviceAccount["private_key"];
+        $tokenId = $request->token; 
 
+        
         try {
-            $verifyTokenId = $auth->verifyIdToken($tokenId);
+            $this->decoded = JWT::decode($tokenId, new Key($private_key, 'HS256'));
+            $email = $this->decoded->claims->email;      
+            $roles = $this->decoded->claims->roles;
+            $token = $this->decoded->claims->token;
+            if ($this->verifyToken($email,$token)->count() > 0) {
+                $result = true;
+            }
         } catch (FailedToVerifyToken $e) {
             $result = false;
-        }
-         
-        $email = $verifyTokenId->CustomToken()->get('email');
-        $roles = $verifyTokenId->CustomToken()->get('roles');
-        $token = $verifyTokenId->CustomToken()->get('token');
-
-        if ($this->verifyToken($request)->count() > 0) {
-            $result = true;
         }
         return $result;
     }
@@ -75,8 +81,9 @@ class ChangePasswordController extends Controller
     private function resetPasswordUser($email,$password,$token)
     {
         // find email
-        $acc = Account::where('email', $request->email)->first();
+        $acc = Account::where('email', $email)->first();
         // update password
+        dd($acc);
         $acc->update([
             'password' => Hash::make($password),
         ]);
@@ -85,6 +92,8 @@ class ChangePasswordController extends Controller
         $this->verifyToken($email,$token)->delete();
         return view('content.authentications.reset-password-success');
     }
+
+
 
     private function resetPasswordAdmin($email,$password,$token)
     {

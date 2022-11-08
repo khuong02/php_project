@@ -30,9 +30,9 @@
             <div class="mb-3">
               <input type="hidden" name ="token" id="token" value = "{{$token}}" >
               <label for="password" class="form-label">Password</label>
-              <input type="text" class="form-control" id="password" name="password" placeholder="Enter your new password" autofocus>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter your new password" autofocus>
               <label for="password" class="form-label">password confirm</label>
-              <input type="text" class="form-control" id="password_confirm" name="password_confirm" placeholder="Enter your new password confirm" autofocus>
+              <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Enter your new password confirm" autofocus>
             </div>
             <button class="btn btn-primary d-grid w-100">Reset Password</button>
           </form>

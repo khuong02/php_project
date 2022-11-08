@@ -131,7 +131,7 @@ class AuthController extends Controller
                 'message' => $e->getMessage(),
             ], 400);
         }
-
+        
         $uname = $verifiedIdToken->claims()->get('name');
         $email = $verifiedIdToken->claims()->get('email');
         $image = $verifiedIdToken->claims()->get('picture');

@@ -9,13 +9,12 @@ class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $token;
-    public $email;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($token, $email)
+    public function __construct($token)
     {
         $this->token = $token;
     }
