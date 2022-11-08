@@ -17,7 +17,7 @@ class PasswordResetRequestController extends Controller
 {
     public function sendPasswordResetEmail(Request $request)
     {
-       
+
         // If email does not exist
         if (!$this->validEmail($request->email)) {
             return response()->json([
@@ -25,7 +25,7 @@ class PasswordResetRequestController extends Controller
             ], Response::HTTP_NOT_FOUND);
         } else {
             // If email exists
-            if ($this->checkAccountResset($request)->count() > 0) {               
+            if ($this->checkAccountResset($request)->count() > 0) {
                 return response()->json(['message' => 'The account has requested a password reset. Please check your email again'], Response::HTTP_OK);
             } else {
                 $this->sendMail($request);
@@ -57,17 +57,12 @@ class PasswordResetRequestController extends Controller
 
     public function generateJwtToken($request)
     {
-        //tiến hành đọc file serviceAccount
         $serviceAccount  = json_decode(file_get_contents(storage_path()."/serviceAccount.json"),true);
-        //lấy account email
-        $service_account_email = $serviceAccount["client_email"];
-        //lấy private key
         $private_key = $serviceAccount["private_key"];
 
         $now_seconds = time();
 
         $user = User::where( ['email' => $request->email])->first();
-
 
         $customClaims = [];
 
@@ -80,7 +75,7 @@ class PasswordResetRequestController extends Controller
             "uid" => $user->id,
             "claims" => array(
                 'email' => $request->email,
-                'roles' => $request->roles, 
+                'roles' => $request->roles,
                 'token' => $this->generateToken($request->email)
             )
         );

@@ -43,11 +43,7 @@ class ChangePasswordController extends Controller
 
     private function verifyJwtToken($request){
         $result = false;
-
         $serviceAccount  = json_decode(file_get_contents(storage_path()."/serviceAccount.json"),true);
-        //lấy account email
-        $service_account_email = $serviceAccount["client_email"];
-        //lấy private key
         $private_key = $serviceAccount["private_key"];
         $tokenId = $request->token;
 
