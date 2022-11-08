@@ -24,8 +24,10 @@ class ChangePasswordController extends Controller
 
     public function passwordReset(Request $request)
     {
-        // dd($request);
-        if($this->verifyJwtToken($request)){ 
+        $request->validate([
+            'password' => 'required|confirmed',
+        ]);
+        if($this->verifyJwtToken($request)){
             if($this->decoded->claims->roles == "0"){
                 $this->resetPasswordUser($this->decoded->claims->email,$request->password,$this->decoded->claims->token);
                 return View('content.authentications.reset-password-success');
@@ -35,7 +37,7 @@ class ChangePasswordController extends Controller
             }
         }else{
             $this->tokenNotFoundError();
-        }      
+        }
     }
 
 
@@ -47,12 +49,12 @@ class ChangePasswordController extends Controller
         $service_account_email = $serviceAccount["client_email"];
         //lấy private key
         $private_key = $serviceAccount["private_key"];
-        $tokenId = $request->token; 
+        $tokenId = $request->token;
 
-        
+
         try {
             $this->decoded = JWT::decode($tokenId, new Key($private_key, 'HS256'));
-            $email = $this->decoded->claims->email;      
+            $email = $this->decoded->claims->email;
             $roles = $this->decoded->claims->roles;
             $token = $this->decoded->claims->token;
             if ($this->verifyToken($email,$token)->count() > 0) {
@@ -83,7 +85,6 @@ class ChangePasswordController extends Controller
         // find email
         $acc = Account::where('email', $email)->first();
         // update password
-        dd($acc);
         $acc->update([
             'password' => Hash::make($password),
         ]);
