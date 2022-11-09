@@ -9,12 +9,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Kreait\Firebase\Factory;
+use Firebase\JWT\JWT;
 
 class PasswordResetRequestController extends Controller
 {
-
     public function sendPasswordResetEmail(Request $request)
     {
+
         // If email does not exist
         if (!$this->validEmail($request->email)) {
             return response()->json([
@@ -25,7 +28,7 @@ class PasswordResetRequestController extends Controller
             if ($this->checkAccountResset($request)->count() > 0) {
                 return response()->json(['message' => 'The account has requested a password reset. Please check your email again'], Response::HTTP_OK);
             } else {
-                $this->sendMail($request->email);
+                $this->sendMail($request);
                 return response()->json([
                     'message' => 'Check your inbox, we have sent a link to reset email.',
                 ], Response::HTTP_OK);
@@ -33,11 +36,13 @@ class PasswordResetRequestController extends Controller
         }
     }
 
-    public function sendMail($email)
+    public function sendMail($request)
     {
-        $token = $this->generateToken($email);
-        Mail::to($email)->send(new SendMail($token, $email));
+        $token = $this->generateJwtToken($request);
+        Mail::to($request->email)->send(new SendMail($token));
     }
+
+
     public function validEmail($email)
     {
         return !!User::where('email', $email)->first();
@@ -50,12 +55,33 @@ class PasswordResetRequestController extends Controller
         ]);
     }
 
-    // public function generateJwtToken($email, $token)
-    // {
-    //     $customClaims = ['email' => $email, '$token' => $this->generateToken($email)];
-    //     $payload = JWTFactory::make($customClaims);
-    //     return JWTAuth::encode($payload);
-    // }
+    public function generateJwtToken($request)
+    {
+        $serviceAccount  = json_decode(file_get_contents(storage_path()."/serviceAccount.json"),true);
+        $private_key = $serviceAccount["private_key"];
+
+        $now_seconds = time();
+
+        $user = User::where( ['email' => $request->email])->first();
+
+        $customClaims = [];
+
+        $payload = array(
+            "iss" => $service_account_email,
+            "sub" => $service_account_email,
+            "aud" => "https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit",
+            "iat" => $now_seconds,
+            "exp" => $now_seconds+(60*60),  // Maximum expiration time is one hour
+            "uid" => $user->id,
+            "claims" => array(
+                'email' => $request->email,
+                'roles' => $request->roles,
+                'token' => $this->generateToken($request->email)
+            )
+        );
+        $jwtToken = JWT::encode($payload, $private_key, "HS256");
+        return $jwtToken;
+    }
 
     public function generateToken($email)
     {

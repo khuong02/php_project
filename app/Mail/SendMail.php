@@ -9,16 +9,14 @@ class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $token;
-    public $email;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($token, $email)
+    public function __construct($token)
     {
         $this->token = $token;
-        $this->email = $email;
     }
     /**
      * Build the message.
@@ -28,8 +26,7 @@ class SendMail extends Mailable
     public function build()
     {
         return $this->markdown('Email.resetPassword')->with([
-            'token' => $this->token,
-            'email' => $this->email,
+            'token' => $this->token
         ]);
     }
 }
