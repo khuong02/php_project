@@ -17,7 +17,7 @@ use App\Http\Controllers\ChangePasswordController;
 |
 */
 Route::get('/',function (){
-    return 'hello';
+    return view("content.authentications.auth-login-basic");
 });
 
 

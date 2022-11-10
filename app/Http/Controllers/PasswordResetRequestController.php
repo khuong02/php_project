@@ -58,6 +58,7 @@ class PasswordResetRequestController extends Controller
     public function generateJwtToken($request)
     {
         $serviceAccount  = json_decode(file_get_contents(storage_path()."/serviceAccount.json"),true);
+        $service_account_email = $serviceAccount["client_email"];
         $private_key = $serviceAccount["private_key"];
 
         $now_seconds = time();
