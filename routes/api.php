@@ -38,4 +38,3 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::post('/reset-password-request', [PasswordResetRequestController::class, 'sendPasswordResetEmail']);
-Route::post('/change-password', [PasswordResetRequestController::class, 'passwordResetProcess']);

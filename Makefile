@@ -1,6 +1,9 @@
 run:
 	@php artisan serve
 
+ngrok:
+	@ngrok http 8000
+
 setup-dev:
 	@docker-compose up
 
