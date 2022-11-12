@@ -47,7 +47,7 @@ class Account extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            'user_id' => $this->user_id, // my custom claim, add as many as you like
+            'uid' => $this->user_id, // my custom claim, add as many as you like
         ];
     }
 }

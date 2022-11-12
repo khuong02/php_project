@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
-    private $id, $username, $cost, $email,$avatar;
+    private $id, $username, $cost, $email, $avatar;
 
     /**
      * The attributes that are mass assignable.
@@ -29,10 +29,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function setProfile($req)
     {
-        return DB::insert('insert into users (username, email, avatar) values (?, ?, ?)', [$req["username"], $req["email"],$req["avatar"]]);
+        return DB::insert('insert into users (username, email, avatar) values (?, ?, ?)', [$req["username"], $req["email"], $req["avatar"]]);
     }
 
-    public function findUserByEmail($email){
+    public function findUserByEmail($email)
+    {
         return DB::table('users')->where('email', $email)->first();
     }
 
@@ -60,7 +61,7 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            "user_id"=>$this->id,
+            "uid" => $this->id,
         ];
     }
 }

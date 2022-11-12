@@ -20,7 +20,7 @@ class Auth
         try {
             $token = JWTAuth::getToken();
             $apy = JWTAuth::getPayload($token)->toArray();
-            $request->attributes->add(['user_id' => $apy['user_id']]);
+            $request->attributes->add(['user_id' => $apy['uid']]);
 
             return $next($request);
         } catch (\Throwable $th) {
