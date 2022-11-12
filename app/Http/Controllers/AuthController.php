@@ -34,9 +34,9 @@ class AuthController extends Controller
             $account = $accountModel->findAccountByEmail($request->email);
             if (!Hash::check($request->password, $account->password)) {
                 return response()->json([
-                    'status' => 400,
+                    'status' => 500,
                     'message' => 'Password does not match',
-                ], 400);
+                ], 500);
             }
 
             $credentials = [
@@ -116,7 +116,7 @@ class AuthController extends Controller
 
     public function verify(Request $request)
     {
-        $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN','D:\Workspace\laravel\php_project\serviceAccount.json'));
+        $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN', 'D:\Workspace\laravel\php_project\serviceAccount.json'));
         $auth = $factory->createAuth();
 
         $idToken = $request->header('authorization');
@@ -129,7 +129,7 @@ class AuthController extends Controller
                 'message' => $e->getMessage(),
             ], 400);
         }
-        
+
         $uname = $verifiedIdToken->claims()->get('name');
         $email = $verifiedIdToken->claims()->get('email');
         $image = $verifiedIdToken->claims()->get('picture');
