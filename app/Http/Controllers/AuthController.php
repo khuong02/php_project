@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\User;
 use App\Models\UserSetting;
 use Exception;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +24,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $now_seconds = time();
+
         try {
             $request->validate([
                 'email' => 'required|string|email',
@@ -39,21 +42,13 @@ class AuthController extends Controller
                 ], 500);
             }
 
-            $credentials = [
-                'email' => $request->email,
-                'password' => $request->password,
-                'user_id' => +$account->user_id,
-            ];
+            $payload = array(
+                "iat" => $now_seconds,
+                "exp" => $now_seconds + (60 * 60 * 24 * 365),  // Maximum expiration time is one hour
+                "uid" => $account->id,
+            );
 
-            JWTAuth::factory()->setTTL(60 * 24 * 365);
-
-            $token = Auth::guard('account_api')->attempt($credentials);
-            if (!$token) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => 'Unauthorized',
-                ], 401);
-            }
+            $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
 
             return response()->json([
                 'status' => 200,
@@ -72,6 +67,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $now_seconds = time();
         try {
             $request->validate([
                 'username' => 'required|string|max:255',
@@ -79,8 +75,8 @@ class AuthController extends Controller
                 'password' => 'min:3|required_with:cf_password|same:cf_password',
                 'cf_password' => 'min:3'
             ]);
-            $setting = new UserSetting();
 
+            $setting = new UserSetting();
 
             $user = User::create([
                 'username' => $request->username,
@@ -89,15 +85,19 @@ class AuthController extends Controller
 
             $setting->setUserSetting($user->id);
 
-            $account = Account::create([
+            Account::create([
                 'user_id' => $user->id,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
 
-            JWTAuth::factory()->setTTL(60 * 24 * 365);
+            $payload = array(
+                "iat" => $now_seconds,
+                "exp" => $now_seconds + (60 * 60 * 24 * 365),  // Maximum expiration time is one hour
+                "uid" => $user->id,
+            );
 
-            $token = Auth::login($account);
+            $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
             return response()->json([
                 'status' => 200,
                 'message' => 'Account created successfully',
@@ -118,6 +118,7 @@ class AuthController extends Controller
     {
         $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN', 'D:\Workspace\laravel\php_project\serviceAccount.json'));
         $auth = $factory->createAuth();
+        $now_seconds = time();
 
         $idToken = $request->header('authorization');
 
@@ -143,12 +144,18 @@ class AuthController extends Controller
                 "avatar" => $image,
             ]);
         }
-        $customToken = $auth->createCustomToken($user->id, [], 'P365D');
-        $customTokenString = $customToken->toString();
+
+        $payload = array(
+            "iat" => $now_seconds,
+            "exp" => $now_seconds + (60 * 60 * 24 * 365),  // Maximum expiration time is one hour
+            "uid" => $user->id,
+        );
+
+        $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
 
         return response()->json([
             'status' => 200,
-            'token' => $customTokenString,
+            'token' => $token,
         ], 200);
     }
 }
