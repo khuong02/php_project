@@ -3,8 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Firebase\JWT\Key;
 
 class Auth
 {
@@ -19,8 +21,9 @@ class Auth
     {
         try {
             $token = JWTAuth::getToken();
-            $apy = JWTAuth::getPayload($token)->toArray();
-            $request->attributes->add(['user_id' => $apy['uid']]);
+            $decoded = JWT::decode($token, new Key(env('JWT_SECRET'), 'HS256'));
+
+            $request->attributes->add(['user_id' => $decoded->uid]);
 
             return $next($request);
         } catch (\Throwable $th) {
