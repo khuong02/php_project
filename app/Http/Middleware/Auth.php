@@ -23,6 +23,10 @@ class Auth
             $token = JWTAuth::getToken();
             $decoded = JWT::decode($token, new Key(env('JWT_SECRET'), 'HS256'));
 
+            if (time() > $decoded->exp) {
+                throw new \Throwable();
+            }
+
             $request->attributes->add(['user_id' => $decoded->uid]);
 
             return $next($request);
