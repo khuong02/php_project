@@ -60,8 +60,7 @@ class PasswordResetRequestController extends Controller
 
             $payload = array(
                 "iat" => $now_seconds,
-                "exp" => $now_seconds + (60 * 60),
-                // Maximum expiration time is one hour
+                "exp" => $now_seconds + (60 * 60), // Maximum expiration time is one hour
                 "uid" => $user->id,
                 "claims" => array(
                     'email' => $request->email,

@@ -12,13 +12,13 @@ use Firebase\JWT\Key;
 class ChangePasswordController extends Controller
 {
 
-    private $decoded;
+    private $decodejwt;
 
-    private function decodedJwt($request)
+    private function decodedJwt($jwtToken)
     {
-        $private_key = env("JWT_SECRET");
-        $tokenId = $request->token;
         try {
+            $private_key = env("JWT_SECRET");
+            $tokenId = $jwtToken;
             $decoct = JWT::decode($tokenId, new Key($private_key, 'HS256'));
             return $decoct;
         } catch (\Throwable $th) {
@@ -30,12 +30,11 @@ class ChangePasswordController extends Controller
     {
         $result = false;
         try {
-            if ($this->decoded === null) {
-                $this->decoded = $this->decoded($request);
-            } else {
-                $email = $this->decoded->claims->email;
-                $token = $this->decoded->claims->token;
+            if ($this->decodejwt === null) {
+                $this->decodejwt = $this->decodedJwt($request->token);
             }
+            $email = $this->decodejwt->claims->email;
+            $token = $this->decodejwt->claims->token;
             if ($this->verifyToken($email, $token)->count() > 0) {
                 $result = true;
             }
@@ -45,19 +44,12 @@ class ChangePasswordController extends Controller
         return $result;
     }
 
-
-    // Verify if token is valid
     private function verifyToken($email, $token)
     {
         return DB::table('password_resets')->where([
             'email' => $email,
             'token' => $token,
         ]);
-    }
-
-    private function tokenNotFoundError()
-    {
-        return view('content.pages.pages-misc-error');
     }
 
     private function resetPasswordUser($email, $password, $token)
@@ -95,21 +87,22 @@ class ChangePasswordController extends Controller
         }
     }
 
-    public function getFormResetPassword(Request $request)
+    public function getFormResetPassword(Request $request,$token)
     {
-
         try {
-            if ($this->decoded === null) {
-                $this->decoded = $this->decodedJwt($request);
-            } else {
-                if (time() > $this->decoded->exp) {
-                    return back()->with('Erro', 'Link expired !!!');
-                } else {
-                    return View('content.authentications.reset-password', ['token' => $request->token]);
-                }
+            if ($this->decodejwt === null) {
+                $this->decodejwt = $this->decodedJwt($token);
             }
+            if (time() > $this->decodejwt->exp) {
+                return view('content.pages.pages-misc-token-exp');
+            }
+            if(!$this->verifyToken($this->decodejwt->claims->email,$this->decodejwt->claims->token)->count() > 0){
+                return view('content.pages.pages-misc-token-exp');
+            }
+            return View('content.authentications.reset-password', ['token' => $token]);
+
         } catch (\Throwable $th) {
-            throw $th;
+            return view('content.pages.pages-misc-under-maintenance');
         }
     }
 
@@ -119,18 +112,23 @@ class ChangePasswordController extends Controller
             'password' => 'required|confirmed',
             'token' => 'required'
         ]);
-
-        if ($this->verifyJwtToken($request)) {
-            if ($this->decoded->claims->roles == "0") {
-                $this->resetPasswordUser($this->decoded->claims->email, $request->password, $this->decoded->claims->token);
-                return View('content.authentications.reset-password-success');
-            } else {
-                $this->resetPasswordAdmin($this->decoded->claims->email, $request->password, $this->decoded->claims->token);
+        try {
+            if($this->verifyJwtToken($request)){
+                if ($this->decodejwt->claims->roles == "0") {
+                    $this->resetPasswordUser($this->decodejwt->claims->email, $request->password, $this->decodejwt->claims->token);
+                }
+                if($this->decodejwt->claims->roles == "1") {
+                    $this->resetPasswordAdmin($this->decodejwt->claims->email, $request->password, $this->decodejwt->claims->token);
+                }
                 return View('content.authentications.reset-password-success');
             }
-        } else {
-            $this->tokenNotFoundError();
+            if (!$this->verifyJwtToken($request)) {
+                return view('content.pages.pages-misc-token-exp');
+            }
+        } catch (\Throwable $th) {
+            return view('content.pages.pages-misc-under-maintenance');
         }
     }
+
 
 }
