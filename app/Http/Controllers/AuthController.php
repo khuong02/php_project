@@ -45,7 +45,7 @@ class AuthController extends Controller
             $payload = array(
                 "iat" => $now_seconds,
                 "exp" => $now_seconds + (60 * 60 * 24 * 365),  // Maximum expiration time is one hour
-                "uid" => $account->id,
+                "uid" => $account->user_id,
             );
 
             $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
