@@ -23,6 +23,7 @@ class QuizzQuestion extends Model
             'select *
             from table_quizz_questions
             where quizz_id = ? and difficulty_id = ?
+            order by RAND()
             limit ?
             offset ?',
             [$quizz_id, $difficulty_id, $limit, $page - 1]
