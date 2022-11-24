@@ -13,8 +13,8 @@ class QuestionController extends Controller
     public function getQuestionAndAnswer(Request $request)
     {
         try {
-            $page = $request['page'] || 1;
-            $limit = $request['limit'] || 10;
+            $page = $request['page'] ?: 1;
+            $limit = (int)$request['limit'] ?: 10;
             $quizz_id = $request['quizz_id'];
             $difficulty_id = $request['difficulty_id'];
 
@@ -38,11 +38,11 @@ class QuestionController extends Controller
                 $data['question'] = $questions[$i]->question;
                 $data['difficulty'] = $difficultyData[0]->name;
 
-                for ($i = 0; $i < count($answerData); $i++) {
-                    if ($answerData[$i]->correct_answer == 1) {
-                        $data['correctAnswer'] = $answerData[$i]->answer;
+                for ($j = 0; $j < count($answerData); $j++) {
+                    if ($answerData[$j]->correct_answer == 1) {
+                        $data['correctAnswer'] = $answerData[$j]->answer;
                     } else {
-                        array_push($data['incorrectAnswers'], $answerData[$i]->answer);
+                        array_push($data['incorrectAnswers'], $answerData[$j]->answer);
                     }
                 }
 

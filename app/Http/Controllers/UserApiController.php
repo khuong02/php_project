@@ -27,6 +27,7 @@ class UserApiController extends Controller
 
             $data->username = $request->get('username');
             $data->cost = $request->get('cost');
+            $data->avatar = $request->get('avatar');
 
             $user->updateUserName($data);
 
