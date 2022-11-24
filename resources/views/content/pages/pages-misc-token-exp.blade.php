@@ -11,11 +11,11 @@
     <!--Under Maintenance -->
     <div class="container-xxl container-p-y">
         <div class="misc-wrapper">
-            <h2 class="mb-2 mx-2">Under Maintenance!</h2>
+            <h2 class="mb-2 mx-2">Expiration !</h2>
             <p class="mb-4 mx-2">
-                Sorry for the inconvenience but we're performing some maintenance at the moment
+                Your link has expired, please contact the admin for more details
             </p>
-            <a href="{{ url('/') }}" class="btn btn-primary">Back to home</a>
+            <a href="mailto: batac922@gmail.com" class="btn btn-primary">Send mail to admin</a>
             <div class="mt-4">
                 <img src="{{ asset('assets/img/illustrations/girl-doing-yoga-light.png') }}" alt="girl-doing-yoga-light"
                     width="500" class="img-fluid">
