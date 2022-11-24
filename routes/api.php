@@ -7,8 +7,7 @@ use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\PasswordResetRequestController;
 
 use App\Http\Controllers\ChangePasswordController;
-
-
+use App\Http\Controllers\LeaderBoardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +29,8 @@ Route::post('/users/settings', [UserApiController::class, 'updateSetting'])->mid
 Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer'])->middleware('myauth');
 
 Route::get('/quizz', [TopicController::class, 'getTopics'])->middleware('myauth');
+
+Route::post('/leaderboard', [LeaderBoardController::class, 'SetLeaderBoard'])->middleware('myauth');
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
