@@ -20,6 +20,6 @@ class LeaderBoard extends Model
 
     function Set($data)
     {
-        return DB::insert('insert into leaderboard (user_id, quantity, time, score) values (?, ?, ?, ?)', [$data['userID'], $data['quantity'], $data['time'], $data['score']]);
+        return DB::insert('INSERT INTO leaderboard (user_id, quantity, time, score) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE quantity = ?, time = ?, score = ?;', [$data['userID'], $data['quantity'], $data['time'], $data['score'], $data['quantity'], $data['time'], $data['score']]);
     }
 }
