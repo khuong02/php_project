@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthAdmin
 {
@@ -18,16 +19,14 @@ class AuthAdmin
     public function handle(Request $request, Closure $next)
     {
         try {
-            $cookie = $request->cookie('token');
-            if ($cookie === null) {
-                return redirect('/auth/login ');
-            }
-
+            $cookie = Cookie::get('token');
             if ($cookie !== null) {
                 return redirect('/');
+            } else {
+                return $next($request);
             }
         } catch (\Throwable $th) {
-            throw $th;
+            return redirect('/pages/misc-under-maintenance');
         }
     }
 }
