@@ -19,18 +19,20 @@ use App\Http\Controllers\AuthUI;
 |
 */
 // Main Page Route
+$controller_path = 'App\Http\Controllers';
+
+
+
 Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('hendletoken');
 
 // authentication
 Route::get('/auth/login', [AuthUI::class, 'loginPage'])->name('auth-login-basic')->middleware('authadmin');
 Route::post('/auth/login', [UserAdminController::class, 'loginAdmin'])->name('login-admin');
 
+Route::get('/auth/logout', [UserAdminController::class, 'adminLogOut'])->name('logout-admin');
+
 Route::get('/change-password/{token}', [ChangePasswordController::class, 'getFormResetPassword']);
 Route::post('/change-password', [ChangePasswordController::class, 'passwordReset'])->name('change-password');
-
-$controller_path = 'App\Http\Controllers';
-
-
 
 
 

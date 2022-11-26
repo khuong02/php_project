@@ -98,9 +98,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _popperjs_core_dist_umd_popper_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @popperjs/core/dist/umd/popper.min */ "./node_modules/@popperjs/core/dist/umd/popper.min.js");
 /* harmony import */ var _popperjs_core_dist_umd_popper_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_popperjs_core_dist_umd_popper_min__WEBPACK_IMPORTED_MODULE_0__);
-
-
-// Required to enable animations on dropdowns/tooltips/popovers
+ // Required to enable animations on dropdowns/tooltips/popovers
 // Popper.Defaults.modifiers.computeStyle.gpuAcceleration = false
 
 

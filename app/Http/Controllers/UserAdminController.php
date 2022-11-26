@@ -73,11 +73,18 @@ class UserAdminController extends Controller
                     $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
                     $oneday = 60 * 24;
                     $this->setCookie('token', $token, $oneday);
-                    return redirect('/');
+                    return response()->json(
+                        [
+                            'erro' => false,
+                            'message' => 'Logged in successfully'
+                        ],
+                        200
+                    );
                 } else {
                     return response()->json(
                         [
-                            'msg' => 'sai mat khau',
+                            'erro' => true,
+                            'message' => 'Incorrect password',
                         ],
                         400
                     );
@@ -85,7 +92,8 @@ class UserAdminController extends Controller
             } else {
                 return response()->json(
                     [
-                        'msg' => 'khong tim thay email',
+                        'erro' => true,
+                        'message' => 'Not find the email',
                     ],
                     400
                 );
@@ -93,9 +101,10 @@ class UserAdminController extends Controller
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                    'msg' => 'login erro',
+                    'erro' => true,
+                    'message' => 'server erro',
                 ],
-                403
+                500
             );
         }
     }
