@@ -18,29 +18,21 @@ use App\Http\Controllers\AuthUI;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/', function () {
-//     $a = 2;
-
-//     if ($a == 1) {
-//         return redirect()->route('auth-login-basic');
-//     } else {
-//         return view("content.authentications.auth-login-basic");
-//     }
-// });
-
-
-Route::get('/change-password/{token}', [ChangePasswordController::class, 'getFormResetPassword']);
-Route::post('/change-password', [ChangePasswordController::class, 'passwordReset'])->name('change-password');
-
-$controller_path = 'App\Http\Controllers';
-
 // Main Page Route
 Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('hendletoken');
 
 // authentication
 Route::get('/auth/login', [AuthUI::class, 'loginPage'])->name('auth-login-basic')->middleware('authadmin');
 Route::post('/auth/login', [UserAdminController::class, 'loginAdmin'])->name('login-admin');
+
+Route::get('/change-password/{token}', [ChangePasswordController::class, 'getFormResetPassword']);
+Route::post('/change-password', [ChangePasswordController::class, 'passwordReset'])->name('change-password');
+
+$controller_path = 'App\Http\Controllers';
+
+
+
+
 
 
 
