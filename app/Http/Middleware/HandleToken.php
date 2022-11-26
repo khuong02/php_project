@@ -18,8 +18,6 @@ class HandleToken
      */
     public function handle(Request $request, Closure $next)
     {
-
-
         try {
             $cookie = Cookie::get('token');
             if ($cookie === null) {

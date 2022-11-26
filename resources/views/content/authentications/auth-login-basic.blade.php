@@ -93,7 +93,6 @@
                     type: method,
                     success: function(response) {
                         if (!response.erro) {
-                            alert(response.message);
                             location.reload(true);
                         }
                     },

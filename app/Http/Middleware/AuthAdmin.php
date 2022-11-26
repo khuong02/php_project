@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Cookie;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class AuthAdmin
 {
@@ -19,8 +21,11 @@ class AuthAdmin
     public function handle(Request $request, Closure $next)
     {
         try {
+
             $cookie = Cookie::get('token');
             if ($cookie !== null) {
+                $decoded = JWT::decode($cookie, new Key(env('JWT_SECRET'), 'HS256'));
+                $request->attributes->add(['user_id' => $decoded->uid]);
                 return redirect('/');
             } else {
                 return $next($request);

@@ -16,7 +16,6 @@ class UserAdminController extends Controller
 {
     public function createAccountAdmin(Request $request)
     {
-        $avatarDF = 'https://res.cloudinary.com/didqd2uyc/image/upload/v1668469798/hluc0oca3d2kke3ifcvr.jpg';
         try {
             $validate =  $request->validate(
                 [
@@ -29,8 +28,7 @@ class UserAdminController extends Controller
                 [
                     'username' => $validate['username'],
                     'email' => $validate['email'],
-                    'password' => Hash::make($validate['password']),
-                    'avatar' => $avatarDF
+                    'password' => Hash::make($validate['password'])
                 ]
             );
 
