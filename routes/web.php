@@ -36,12 +36,13 @@ Route::post('/change-password', [ChangePasswordController::class, 'passwordReset
 $controller_path = 'App\Http\Controllers';
 
 // Main Page Route
-Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboard-analytics');
-
+Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('hendletoken');
 
 // authentication
 Route::get('/auth/login', [AuthUI::class, 'loginPage'])->name('auth-login-basic')->middleware('authadmin');
 Route::post('/auth/login', [UserAdminController::class, 'loginAdmin'])->name('login-admin');
+
+
 
 Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name('auth-register-basic');
 Route::get('/auth/forgot-password-basic', $controller_path . '\authentications\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
