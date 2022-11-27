@@ -22,4 +22,15 @@ class LeaderBoard extends Model
     {
         return DB::insert('INSERT INTO leaderboard (user_id, quantity, time, score) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE quantity = ?, time = ?, score = ?;', [$data['userID'], $data['quantity'], $data['time'], $data['score'], $data['quantity'], $data['time'], $data['score']]);
     }
+
+    function getList()
+    {
+        $query = "SELECT user_id,php_project.leaderboard.time , quantity,score, username,email, avatar 
+        FROM php_project.leaderboard 
+        INNER JOIN php_project.users 
+        where user_id = php_project.users.id 
+        order by score,quantity,php_project.leaderboard.time 
+        limit 10;";
+        return DB::select($query);
+    }
 }

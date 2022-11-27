@@ -35,7 +35,31 @@ class LeaderBoardController extends Controller
             return response()->json([
                 'status' => 500,
                 'message' => "Set failed!",
-            ], 200);
+            ], 500);
+        }
+    }
+
+    public function getList(Request $request)
+    {
+        try {
+            $id = $request->get('user_id');
+            if ($id == null) {
+                throw new \Throwable;
+            }
+
+            $leaderboard = new LeaderBoard();
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $leaderboard->getList(),
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => "Get failed!",
+            ], 500);
         }
     }
 }

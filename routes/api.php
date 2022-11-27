@@ -33,6 +33,8 @@ Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer'])->m
 Route::get('/quizz', [TopicController::class, 'getTopics'])->middleware('myauth');
 
 Route::post('/leaderboard', [LeaderBoardController::class, 'SetLeaderBoard'])->middleware('myauth');
+Route::get('/leaderboard', [LeaderBoardController::class, 'getList'])->middleware('myauth');
+
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
