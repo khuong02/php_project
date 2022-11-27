@@ -2526,9 +2526,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var masonry_layout_dist_masonry_pkgd__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! masonry-layout/dist/masonry.pkgd */ "./node_modules/masonry-layout/dist/masonry.pkgd.js");
 /* harmony import */ var masonry_layout_dist_masonry_pkgd__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(masonry_layout_dist_masonry_pkgd__WEBPACK_IMPORTED_MODULE_0__);
 // var Masonry = require('masonry-layout/dist/masonry.pkgd')
-
 // export { Masonry }
-
 
 
 })();

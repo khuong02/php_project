@@ -7,7 +7,7 @@
 <!-- beautify ignore:end -->
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async="async" src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+
 <script>
   window.dataLayer = window.dataLayer || [];
 

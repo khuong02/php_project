@@ -604,10 +604,14 @@
 
 .apexcharts-pie-label-delay {
   opacity: 0;
-  animation-name: opaque;
-  animation-duration: 0.3s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease;
+  -webkit-animation-name: opaque;
+          animation-name: opaque;
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
 }
 
 .apexcharts-canvas .apexcharts-element-hidden {
@@ -637,6 +641,15 @@
   transition: 0.15s ease all;
 }
 
+@-webkit-keyframes opaque {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes opaque {
   0% {
     opacity: 0;
@@ -646,6 +659,14 @@
   }
 }
 /* Resize generated styles */
+@-webkit-keyframes resizeanim {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0;
+  }
+}
 @keyframes resizeanim {
   from {
     opacity: 0;
@@ -655,7 +676,8 @@
   }
 }
 .resize-triggers {
-  animation: 1ms resizeanim;
+  -webkit-animation: 1ms resizeanim;
+          animation: 1ms resizeanim;
   visibility: hidden;
   opacity: 0;
 }
