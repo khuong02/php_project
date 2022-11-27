@@ -24,7 +24,7 @@ class UserAdminController extends Controller
                     'password' => 'min:3|required|string|confirmed'
                 ]
             );
-            $userAdmin = UserAdmin::create(
+            UserAdmin::create(
                 [
                     'username' => $validate['username'],
                     'email' => $validate['email'],

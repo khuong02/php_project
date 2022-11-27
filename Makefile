@@ -1,5 +1,8 @@
 run:
-	@php artisan serve
+	@php artisan serve 
+
+send:
+	@php artisan db:seed
 
 ngrok:
 	@ngrok http 8000

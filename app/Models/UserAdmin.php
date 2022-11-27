@@ -24,10 +24,6 @@ class UserAdmin extends Authenticatable implements JWTSubject
         'password'
     ];
 
-    protected $attributes  = [
-        'avatar' => 'https://res.cloudinary.com/didqd2uyc/image/upload/v1668469798/hluc0oca3d2kke3ifcvr.jpg'
-    ];
-
     public function setProfile($req)
     {
         return DB::insert('insert into table_admins (username, email, avatar) values (?, ?, ?)', [$req["username"], $req["email"], $req["avatar"]]);
