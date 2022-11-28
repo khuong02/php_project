@@ -14,11 +14,35 @@ class LeaderBoardController extends Controller
             if ($id == null) {
                 throw new \Throwable;
             }
+
             $time = $request['time'];
             $score = $request['score'];
             $quantity = $request['quantity'];
 
             $leaderboard = new LeaderBoard();
+
+            $old_data = $leaderboard->GetByUserID($id)[0];
+            if ($old_data->score > $score) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "successfully!!",
+                ], 200);
+            }
+
+            if ($old_data->score == $score && $old_data->quantity < $quantity) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "successfully!!",
+                ], 200);
+            }
+
+            if ($old_data->score == $score && $old_data->quantity == $quantity && $old_data->time <= $time) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "successfully!!",
+                ], 200);
+            }
+
             $data = [
                 "userID" => $id,
                 "score" => $score,
@@ -34,7 +58,7 @@ class LeaderBoardController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 500,
-                'message' => "Set failed!",
+                'message' => $th->getMessage(),
             ], 500);
         }
     }
