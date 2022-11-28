@@ -14,7 +14,7 @@ class Leaderboard extends Migration
     public function up()
     {
         Schema::create('leaderboard', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->unique();
             $table->integer('time');
             $table->integer('quantity');
