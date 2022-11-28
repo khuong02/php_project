@@ -60,7 +60,7 @@ class PasswordResetRequestController extends Controller
                     Response::HTTP_ACCEPTED
                 );
             } else {
-                $this->sendMail($request);
+                $this->sendMailAdmin($request);
                 return response()->json([
                     'erro' => false,
                     'message' => 'Check your inbox, we have sent a link to reset email.',

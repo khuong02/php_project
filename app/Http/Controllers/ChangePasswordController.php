@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\UserAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -72,13 +73,12 @@ class ChangePasswordController extends Controller
     private function resetPasswordAdmin($email, $password, $token)
     {
         try {
-            $usre = DB::table('table_admins')->where(
-                ['email' => $email]
-            );
-            $usre->update([
-                'password' => Hash::make($password)
+            $acc = UserAdmin::where('email', $email)->first();
+
+            $acc->update([
+                'password' => Hash::make($password),
             ]);
-            $usre->save();
+            $acc->save();
 
             $this->verifyToken($email, $token)->delete();
         } catch (\Throwable $th) {

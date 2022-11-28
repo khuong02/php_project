@@ -24,7 +24,7 @@
                         <!-- /Logo -->
                         <h4 class="mb-2">Forgot Password? 🔒</h4>
                         <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
-                        <form id="formAuthentication" class="mb-3" action="{{ url('/api/reset-password-request') }}"
+                        <form id="formAuthentication" class="mb-3" action="{{ url('/api/reset-admin-password-request') }}"
                             method="POST">
                             @csrf
                             <div class="mb-3">
@@ -36,8 +36,7 @@
                             <button class="btn btn-primary d-grid w-100">Send Reset Link</button>
                         </form>
                         <div class="text-center">
-                            <a href="{{ route('reset-password') }}"
-                                class="d-flex align-items-center justify-content-center">
+                            <a href="{{ url('reset-password') }}" class="d-flex align-items-center justify-content-center">
                                 <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                                 Back to login
                             </a>
@@ -68,7 +67,7 @@
                     type: method,
                     success: function(response) {
                         if (!response.erro) {
-                            location.reload(true);
+                            alert(response.message);
                         }
                     },
                     error: function(response) { // handle the error
