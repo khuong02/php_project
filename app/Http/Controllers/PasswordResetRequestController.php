@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,25 +8,61 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\SendMail;
 use App\Models\User;
+use App\Models\UserAdmin;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 use Firebase\JWT\JWT;
 
 class PasswordResetRequestController extends Controller
 {
-    public function sendPasswordResetEmail(Request $request)
+    public function sendPasswordResetEmailUser(Request $request)
     {
         if (!$this->validEmail($request->email)) {
             return response()->json([
+                'erro' => true,
                 'message' => 'Email does not exist.',
             ], Response::HTTP_NOT_FOUND);
         } else {
 
             if ($this->checkAccountResset($request)->count() > 0) {
-                return response()->json(['message' => 'The account has requested a password reset. Please check your email again'], Response::HTTP_ACCEPTED);
+                return response()->json(
+                    [
+                        'erro' => false,
+                        'message' => 'The account has requested a password reset. Please check your email again'
+                    ],
+                    Response::HTTP_ACCEPTED
+                );
             } else {
                 $this->sendMail($request);
                 return response()->json([
+                    'erro' => false,
+                    'message' => 'Check your inbox, we have sent a link to reset email.',
+                ], Response::HTTP_OK);
+            }
+        }
+    }
+
+    public function sendEmailPasswordResetAdmin(Request $request)
+    {
+        if (!$this->validEmailAdmin($request->email)) {
+            return response()->json([
+                'erro' => true,
+                'message' => 'Email does not exist.',
+            ], Response::HTTP_NOT_FOUND);
+        } else {
+
+            if ($this->checkAccountResset($request)->count() > 0) {
+                return response()->json(
+                    [
+                        'erro' => false,
+                        'message' => 'The account has requested a password reset. Please check your email again'
+                    ],
+                    Response::HTTP_ACCEPTED
+                );
+            } else {
+                $this->sendMail($request);
+                return response()->json([
+                    'erro' => false,
                     'message' => 'Check your inbox, we have sent a link to reset email.',
                 ], Response::HTTP_OK);
             }
@@ -39,9 +76,20 @@ class PasswordResetRequestController extends Controller
     }
 
 
+    public function sendMailAdmin($request)
+    {
+        $token = $this->generateJwtTokenAdmin($request);
+        Mail::to($request->email)->send(new SendMail($token));
+    }
+
     private function validEmail($email)
     {
         return !!User::where('email', $email)->first();
+    }
+
+    private function validEmailAdmin($email)
+    {
+        return !!UserAdmin::where('email', $email)->first();
     }
 
     private function checkAccountResset($request)
@@ -70,7 +118,30 @@ class PasswordResetRequestController extends Controller
             );
             $jwtToken = JWT::encode($payload, $private_key, "HS256");
             return $jwtToken;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 
+    private function generateJwtTokenAdmin($request)
+    {
+        try {
+            $private_key = env("JWT_SECRET");
+            $now_seconds = time();
+            $user = UserAdmin::where(['email' => $request->email])->first();
+
+            $payload = array(
+                "iat" => $now_seconds,
+                "exp" => $now_seconds + (60 * 60), // Maximum expiration time is one hour
+                "uid" => $user->id,
+                "claims" => array(
+                    'email' => $request->email,
+                    'roles' => $request->roles,
+                    'token' => $this->generateToken($request->email)
+                )
+            );
+            $jwtToken = JWT::encode($payload, $private_key, "HS256");
+            return $jwtToken;
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -99,5 +170,4 @@ class PasswordResetRequestController extends Controller
             'created_at' => Carbon::now(),
         ]);
     }
-
 }
