@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAdminController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\PasswordResetRequestController;
-
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,14 +22,13 @@ use App\Http\Controllers\PasswordResetRequestController;
 $controller_path = 'App\Http\Controllers';
 
 
-
-Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('hendletoken');
+Route::get('/', [HomeController::class, 'index'])->name('dashboard-analytics')->middleware('hendletoken');
 
 // authentication
 Route::get('/auth/login', [AuthUI::class, 'loginPage'])->name('auth-login-basic')->middleware('authadmin');
 Route::post('/auth/login', [UserAdminController::class, 'loginAdmin'])->name('login-admin');
 
-Route::get('/auth/forgot-password', [AuthUI::class, 'ForgotPassworPage'])->name('auth-reset-password');
+Route::get('/auth/forgot-password', [AuthUI::class, 'ForgotPassworPage'])->name('auth-reset-password')->middleware('authadmin');
 
 Route::get('/auth/logout', [UserAdminController::class, 'adminLogOut'])->name('logout-admin');
 

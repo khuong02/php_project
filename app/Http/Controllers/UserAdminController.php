@@ -120,16 +120,20 @@ class UserAdminController extends Controller
     private function delCookie($cookieName)
     {
         try {
-            Cookie::forget($cookieName);
+            Cookie::queue(Cookie::forget($cookieName));
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function adminLogOut()
+    public function adminLogOut(Request $request)
     {
-        $this->delCookie('token');
-        return redirect('/auth/login');
+        try {
+            $this->delCookie('token');;
+            return redirect('/auth/login');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     private function selectAccountAdmin($email)
