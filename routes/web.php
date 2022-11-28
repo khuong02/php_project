@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-
-use App\Http\Controllers\ChangePasswordController;
-use App\Http\Controllers\UserAdminController;
 use App\Http\Controllers\AuthUI;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserAdminController;
+use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\PasswordResetRequestController;
 
 
 /*
@@ -29,6 +29,8 @@ Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboar
 Route::get('/auth/login', [AuthUI::class, 'loginPage'])->name('auth-login-basic')->middleware('authadmin');
 Route::post('/auth/login', [UserAdminController::class, 'loginAdmin'])->name('login-admin');
 
+Route::get('/auth/forgot-password', [AuthUI::class, 'ForgotPassworPage'])->name('auth-reset-password');
+
 Route::get('/auth/logout', [UserAdminController::class, 'adminLogOut'])->name('logout-admin');
 
 Route::get('/change-password/{token}', [ChangePasswordController::class, 'getFormResetPassword']);
@@ -39,7 +41,6 @@ Route::post('/change-password', [ChangePasswordController::class, 'passwordReset
 
 
 Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name('auth-register-basic');
-Route::get('/auth/forgot-password-basic', $controller_path . '\authentications\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
 
 // layout
 Route::get('/layouts/without-menu', $controller_path . '\layouts\WithoutMenu@index')->name('layouts-without-menu');
