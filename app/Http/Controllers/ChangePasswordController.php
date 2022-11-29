@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\UserAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -63,7 +65,6 @@ class ChangePasswordController extends Controller
             $acc->save();
 
             $this->verifyToken($email, $token)->delete();
-
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -72,35 +73,36 @@ class ChangePasswordController extends Controller
     private function resetPasswordAdmin($email, $password, $token)
     {
         try {
-            $usre = DB::table('table_admins')->where(
-                ['email' => $email]
-            );
-            $usre->update([
-                'password' => Hash::make($password)
+            $acc = UserAdmin::where('email', $email)->first();
+
+            $acc->update([
+                'password' => Hash::make($password),
             ]);
-            $usre->save();
+            $acc->save();
 
             $this->verifyToken($email, $token)->delete();
-
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function getFormResetPassword(Request $request,$token)
+    public function getFormResetPassword(Request $request, $token)
     {
         try {
             if ($this->decodejwt === null) {
                 $this->decodejwt = $this->decodedJwt($token);
             }
+            $email = $this->decodejwt->claims->email;
+            $tokenCheck = $this->decodejwt->claims->token;
+
+
             if (time() > $this->decodejwt->exp) {
                 return view('content.pages.pages-misc-token-exp');
             }
-            if(!$this->verifyToken($this->decodejwt->claims->email,$this->decodejwt->claims->token)->count() > 0){
+            if (!$this->verifyToken($email, $tokenCheck)->count() > 0) {
                 return view('content.pages.pages-misc-token-exp');
             }
             return View('content.authentications.reset-password', ['token' => $token]);
-
         } catch (\Throwable $th) {
             return view('content.pages.pages-misc-under-maintenance');
         }
@@ -113,12 +115,15 @@ class ChangePasswordController extends Controller
             'token' => 'required'
         ]);
         try {
-            if($this->verifyJwtToken($request)){
+            if ($this->verifyJwtToken($request)) {
+                $emailChangePassword = $this->decodejwt->claims->email;
+                $newPassword = $request->password;
+                $tokenResetPassword = $this->decodejwt->claims->token;
                 if ($this->decodejwt->claims->roles == "0") {
-                    $this->resetPasswordUser($this->decodejwt->claims->email, $request->password, $this->decodejwt->claims->token);
+                    $this->resetPasswordUser($emailChangePassword, $newPassword, $tokenResetPassword);
                 }
-                if($this->decodejwt->claims->roles == "1") {
-                    $this->resetPasswordAdmin($this->decodejwt->claims->email, $request->password, $this->decodejwt->claims->token);
+                if ($this->decodejwt->claims->roles == "1") {
+                    $this->resetPasswordAdmin($emailChangePassword, $newPassword, $tokenResetPassword);
                 }
                 return View('content.authentications.reset-password-success');
             }
@@ -126,9 +131,8 @@ class ChangePasswordController extends Controller
                 return view('content.pages.pages-misc-token-exp');
             }
         } catch (\Throwable $th) {
+            dd($th);
             return view('content.pages.pages-misc-under-maintenance');
         }
     }
-
-
 }

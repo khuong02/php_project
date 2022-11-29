@@ -21,22 +21,22 @@ class LeaderBoardController extends Controller
 
             $leaderboard = new LeaderBoard();
 
-            $old_data = $leaderboard->GetByUserID($id)[0];
-            if ($old_data->score > $score) {
+            $old_data = $leaderboard->GetByUserID($id);
+            if (count($old_data) > 0 && $old_data[0]->score > $score) {
                 return response()->json([
                     'status' => 200,
                     'message' => "successfully!!",
                 ], 200);
             }
 
-            if ($old_data->score == $score && $old_data->quantity < $quantity) {
+            if (count($old_data) > 0 && $old_data[0]->score == $score && $old_data[0]->quantity < $quantity) {
                 return response()->json([
                     'status' => 200,
                     'message' => "successfully!!",
                 ], 200);
             }
 
-            if ($old_data->score == $score && $old_data->quantity == $quantity && $old_data->time <= $time) {
+            if (count($old_data) > 0 && $old_data[0]->score == $score && $old_data[0]->quantity == $quantity && $old_data[0]->time <= $time) {
                 return response()->json([
                     'status' => 200,
                     'message' => "successfully!!",

@@ -42,8 +42,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('verify', 'verify');
 });
 
-Route::post('/reset-password-request', [PasswordResetRequestController::class, 'sendPasswordResetEmail']);
-Route::post('/reset-password-request', [PasswordResetRequestController::class, 'sendPasswordResetEmail']);
-
+Route::post('/reset-password-request', [PasswordResetRequestController::class, 'sendPasswordResetEmailUser']);
+Route::post('/reset-admin-password-request', [PasswordResetRequestController::class, 'sendEmailPasswordResetAdmin']);
 
 Route::post('/registerAdmin', [UserAdminController::class, 'createAccountAdmin']);
