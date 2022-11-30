@@ -5,8 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAdminController;
 use App\Http\Controllers\ChangePasswordController;
-use App\Http\Controllers\PasswordResetRequestController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PasswordResetRequestController;
+use App\Http\Controllers\AccountManegementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,8 @@ Route::get('/auth/logout', [UserAdminController::class, 'adminLogOut'])->name('l
 Route::get('/change-password/{token}', [ChangePasswordController::class, 'getFormResetPassword']);
 Route::post('/change-password', [ChangePasswordController::class, 'passwordReset'])->name('change-password');
 
-
+Route::get('/Account', [AccountManegementController::class, 'Index'])->name('account-management');
+Route::post('/Account/update-profile', [UserAdminController::class, 'upProfile'])->middleware('hendletoken');
 
 
 

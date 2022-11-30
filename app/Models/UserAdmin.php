@@ -31,9 +31,7 @@ class UserAdmin extends Authenticatable implements JWTSubject
 
     public function findAdminByEmail($email)
     {
-        return DB::table('table_admins')->where([
-            'email' => $email,
-        ]);
+        return DB::table('table_admins')->where('email', $email)->first();
     }
 
     public function getByID($id)

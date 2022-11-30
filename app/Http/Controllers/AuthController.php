@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Account;
 use App\Models\User;
 use App\Models\UserSetting;
-use Exception;
-use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Kreait\Firebase\Factory;
+use App\Http\Controllers\JwtController;
 
 class AuthController extends Controller
 {
-    //
+    private $jwt;
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register', 'verify']]);
+        $this->jwt = new JwtController();
     }
 
     public function login(Request $request)
@@ -48,7 +47,9 @@ class AuthController extends Controller
                 "uid" => $account->user_id,
             );
 
-            $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
+            $private_key = env("JWT_SECRET");
+            $token = $this->jwt->encodeJwt($payload, $private_key);
+
 
             return response()->json([
                 'status' => 200,
@@ -97,7 +98,9 @@ class AuthController extends Controller
                 "uid" => $user->id,
             );
 
-            $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
+            $private_key = env("JWT_SECRET");
+            $token = $this->jwt->encodeJwt($payload, $private_key);
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Account created successfully',
@@ -151,7 +154,8 @@ class AuthController extends Controller
             "uid" => $user->id,
         );
 
-        $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
+        $private_key = env("JWT_SECRET");
+        $token = $this->jwt->encodeJwt($payload, $private_key);
 
         return response()->json([
             'status' => 200,

@@ -8,20 +8,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+use app\Http\Controllers\JwtController;
 
 class ChangePasswordController extends Controller
 {
 
     private $decodejwt;
+    private $jwt;
+
+    public function __construct()
+    {
+        $this->jwt = new JwtController();
+    }
 
     private function decodedJwt($jwtToken)
     {
         try {
             $private_key = env("JWT_SECRET");
-            $tokenId = $jwtToken;
-            $decoct = JWT::decode($tokenId, new Key($private_key, 'HS256'));
+            $decoct = $this->jwt->decodedJwt($jwtToken, $private_key);
             return $decoct;
         } catch (\Throwable $th) {
             throw $th;
@@ -131,7 +135,6 @@ class ChangePasswordController extends Controller
                 return view('content.pages.pages-misc-token-exp');
             }
         } catch (\Throwable $th) {
-            dd($th);
             return view('content.pages.pages-misc-under-maintenance');
         }
     }
