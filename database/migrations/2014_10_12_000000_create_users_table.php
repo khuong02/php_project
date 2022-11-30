@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->nullable(true);
             $table->string('email')->unique();
             $table->string('cost')->default(5000);
-            $table->string('avatar')->default('https://res.cloudinary.com/didqd2uyc/image/upload/v1668469798/hluc0oca3d2kke3ifcvr.jpg');
+            $table->string('avatar')->default('https://res.cloudinary.com/didqd2uyc/image/upload/v1669794108/mfy7r7izxc29vymozqk0.png');
             $table->timestamps();
         });
     }
