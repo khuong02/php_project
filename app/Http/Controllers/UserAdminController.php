@@ -154,11 +154,40 @@ class UserAdminController extends Controller
 
     public function upProfile(Request $request)
     {
-        $request->validate(
-            [
-                'username' => 'string|max:255',
-                'email' => 'string|email|max:255',
-            ]
-        );
+        try {
+            $request->validate(
+                [
+                    'username' => 'string|max:255',
+                    'email' => 'string|email|max:255',
+                ]
+            );
+            $cookie = $this->getCookie('token');
+            $private_key = env('JWT_SECRET');
+            $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
+
+            $id = $decodoJwt->uid;
+            $userAdmin = UserAdmin::where('id', $id)->first();
+            if ($request->hasFile('avatar')) {
+                $userAdmin->update([
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'avatar' => $this->uploadFile->storeUploads($request, 'avatar')
+                ]);
+            }
+            $userAdmin->update([
+                'username' => $request->username,
+                'email' => $request->email,
+            ]);
+            $userAdmin->save();
+            return response()->json([
+                'status' => 200,
+                'message' => "update successfully!"
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => 500,
+                "message" => "update failed!"
+            ], 500);
+        }
     }
 }

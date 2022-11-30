@@ -36,8 +36,8 @@ Route::get('/auth/logout', [UserAdminController::class, 'adminLogOut'])->name('l
 Route::get('/change-password/{token}', [ChangePasswordController::class, 'getFormResetPassword']);
 Route::post('/change-password', [ChangePasswordController::class, 'passwordReset'])->name('change-password');
 
-Route::get('/Account', [AccountManegementController::class, 'Index'])->name('account-management');
-Route::post('/Account/update-profile', [UserAdminController::class, 'upProfile'])->middleware('hendletoken');
+Route::get('/Account', [AccountManegementController::class, 'Index'])->name('account-management')->middleware('hendletoken');
+Route::post('/Account/update-profile', [UserAdminController::class, 'upProfile'])->name('update-profile-admin')->middleware('hendletoken');
 
 
 
