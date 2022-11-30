@@ -173,11 +173,12 @@ class UserAdminController extends Controller
                     'email' => $request->email,
                     'avatar' => $this->uploadFile->storeUploads($request, 'avatar')
                 ]);
+            } else {
+                $userAdmin->update([
+                    'username' => $request->username,
+                    'email' => $request->email,
+                ]);
             }
-            $userAdmin->update([
-                'username' => $request->username,
-                'email' => $request->email,
-            ]);
             $userAdmin->save();
             return response()->json([
                 'status' => 200,
