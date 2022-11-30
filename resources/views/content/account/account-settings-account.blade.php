@@ -89,10 +89,10 @@
     </div>
 
 
-    {{-- <script src="{{ asset('assets/js/jquery.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script>
         $(function() {
-            $("#formAuthentication").on("submit", function(e) { //id of form
+            $("#formAccountSettings").on("submit", function(e) { //id of form
                 e.preventDefault();
                 var action = $(this).attr("action"); //get submit action from form
                 var method = $(this).attr("method"); // get submit method
@@ -117,5 +117,5 @@
                 })
             });
         });
-    </script> --}}
+    </script>
 @endsection
