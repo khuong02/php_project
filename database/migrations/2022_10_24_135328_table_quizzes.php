@@ -17,6 +17,7 @@ class TableQuizzes extends Migration
             $table->id();
             $table->string('name')->unique()->nullable(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
