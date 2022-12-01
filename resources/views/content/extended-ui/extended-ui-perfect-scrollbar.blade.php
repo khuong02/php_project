@@ -16,111 +16,52 @@
 
 @section('content')
 <h4 class="fw-bold py-3 mb-4">
-  <span class="text-muted fw-light">Extended UI /</span> Perfect
-  Scrollbar
+  <span class="text-muted fw-light">Questions Management /</span> Questions
 </h4>
+  <div class="card">
+    <h5 class="card-header">Quản lý câu hỏi</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Topic</th>
+            <th>Difficult</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          @foreach($listQuestions as $question)
+          <tr>
+            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$question->question}}</strong></td>
+            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{$question->quizz_id}}</td>
+            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{$question->difficulty_id}}</td>
+            {{-- @if($topic->deleted_at === null)
+            <td><span class="badge bg-label-primary me-1">
+              Active
+              @else
+              <td><span class="badge bg-label-warning me-1">
+              Inactive
+            @endif --}}
+            </span></td>
+            <td>
+              <div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-detail me-1"></i> Detail</a>
+                  <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                  <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+          @endforeach
 
-<div class="row">
-  <!-- Vertical Scrollbar -->
-  <div class="col-md-6 col-sm-12">
-    <div class="card overflow-hidden mb-4" style="height: 300px;">
-      <h5 class="card-header">Vertical Scrollbar</h5>
-      <div class="card-body" id="vertical-example">
-        <p>
-          Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll
-          cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé
-          jelly gummi bears lemon drops. Chocolate bar I love macaroon danish
-          candy pudding. Jelly carrot cake I love tart cake bear claw macaroon
-          candy candy canes. Muffin gingerbread sweet jujubes croissant sweet
-          roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love
-          croissant. Donut carrot cake ice cream ice cream. Wafer I love pie
-          danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate
-          marzipan jelly ice cream cake.
-        </p>
-        <p>
-          Marzipan oat cake caramels chocolate. Lemon drops cheesecake jelly
-          beans sweet icing pudding croissant. Donut candy canes carrot cake
-          soufflé. Croissant candy wafer pie I love oat cake lemon drops
-          caramels jujubes. I love macaroon halvah liquorice cake. Danish sweet
-          roll pudding cookie sweet roll I love. Jelly cake I love bear claw
-          jujubes dragée gingerbread. I love cotton candy carrot cake halvah
-          biscuit I love macaroon cheesecake tootsie roll. Chocolate cotton
-          candy biscuit I love fruitcake cotton candy biscuit tart gingerbread.
-          Powder oat cake I love. Cheesecake candy canes macaroon I love wafer I
-          love sweet roll ice cream. Toffee cookie macaroon lemon drops tart
-          candy canes. Gummies gummies pie tiramisu I love bear claw cheesecake.
-        </p>
-        <p>
-          Marzipan oat cake caramels chocolate. Lemon drops cheesecake jelly
-          beans sweet icing pudding croissant. Donut candy canes carrot cake
-          soufflé. Croissant candy wafer pie I love oat cake lemon drops
-          caramels jujubes. I love macaroon halvah liquorice cake. Danish sweet
-          roll pudding cookie sweet roll I love. Jelly cake I love bear claw
-          jujubes dragée gingerbread. I love cotton candy carrot cake halvah
-          biscuit I love macaroon cheesecake tootsie roll. Chocolate cotton
-          candy biscuit I love fruitcake cotton candy biscuit tart gingerbread.
-          Powder oat cake I love. Cheesecake candy canes macaroon I love wafer I
-          love sweet roll ice cream. Toffee cookie macaroon lemon drops tart
-          candy canes. Gummies gummies pie tiramisu I love bear claw cheesecake.
-        </p>
-        <p>
-          Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll
-          cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé
-          jelly gummi bears lemon drops. Chocolate bar I love macaroon danish
-          candy pudding. Jelly carrot cake I love tart cake bear claw macaroon
-          candy candy canes. Muffin gingerbread sweet jujubes croissant sweet
-          roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love
-          croissant. Donut carrot cake ice cream ice cream. Wafer I love pie
-          danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate
-          marzipan jelly ice cream cake.
-        </p>
-        <p>
-          Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll
-          cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé
-          jelly gummi bears lemon drops. Chocolate bar I love macaroon danish
-          candy pudding. Jelly carrot cake I love tart cake bear claw macaroon
-          candy candy canes. Muffin gingerbread sweet jujubes croissant sweet
-          roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love
-          croissant. Donut carrot cake ice cream ice cream. Wafer I love pie
-          danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate
-          marzipan jelly ice cream cake.
-        </p>
-        <p>
-          Sweet roll I love I love. Tiramisu I love soufflé cake tart sweet roll
-          cotton candy cookie. Macaroon biscuit dessert. Bonbon cake soufflé
-          jelly gummi bears lemon drops. Chocolate bar I love macaroon danish
-          candy pudding. Jelly carrot cake I love tart cake bear claw macaroon
-          candy candy canes. Muffin gingerbread sweet jujubes croissant sweet
-          roll. Topping muffin carrot cake sweet. Toffee chocolate muffin I love
-          croissant. Donut carrot cake ice cream ice cream. Wafer I love pie
-          danish marshmallow cheesecake oat cake pie I love. Icing pie chocolate
-          marzipan jelly ice cream cake.
-        </p>
-      </div>
+        </tbody>
+      </table>
     </div>
-  </div>
-  <!--/ Vertical Scrollbar -->
-
-  <!-- Horizontal Scrollbar -->
-  <div class="col-md-6 col-sm-12">
-    <div class="card overflow-hidden mb-4" style="height: 300px;">
-      <h5 class="card-header">Horizontal Scrollbar</h5>
-      <div class="card-body" id="horizontal-example">
-        <img src="{{asset('assets/img/backgrounds/18.jpg')}}" alt="scrollbar-image" />
-      </div>
-    </div>
-  </div>
-  <!--/ Horizontal Scrollbar -->
-
-  <!-- Vertical & Horizontal Scrollbars -->
-  <div class="col-12">
-    <div class="card overflow-hidden" style="height: 500px;">
-      <h5 class="card-header">Vertical & Horizontal Scrollbars</h5>
-      <div class="card-body" id="both-scrollbars-example">
-        <img src="{{asset('assets/img/backgrounds/18.jpg')}}" alt="scrollbar-image" />
-      </div>
-    </div>
-  </div>
-  <!--/ Vertical & Horizontal Scrollbars -->
 </div>
-@endsection
+<br/>
+{{$listQuestions->links('content.mypartial.my-paginate')}}
+
+    @endsection

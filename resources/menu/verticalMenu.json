@@ -20,53 +20,37 @@
       "menuHeader": "Questions management"
     },
     {
-      "name": "Questions",
+      "name": "Topics",
       "icon": "menu-icon tf-icons bx bx-collection",
       "slug": "cards-basic",
       "url": "/cards/basic"
     },
     {
+      "name": "Questions",
+      "icon": "menu-icon tf-icons bx bx-collection",
+      "slug": "perfect-scrollbar",
+      "url": "extended/ui-perfect-scrollbar"
+    },
+    {
+      "name": "Question Answers",
+      "icon": "menu-icon tf-icons bx bx-collection",
+      "slug": "text-divider",
+      "url": "extended/ui-text-divider"
+    },
+    {
       "menuHeader": "User management"
     },
     {
-      "name": "Form Elements",
+      "name": "User",
       "icon": "menu-icon tf-icons bx bx-detail",
-      "slug": "forms",
-      "submenu": [
-        {
-          "url": "forms/basic-inputs",
-          "name": "Basic Inputs",
-          "slug": "forms-basic-inputs"
-        },
-        {
-          "url": "forms/input-groups",
-          "name": "Input groups",
-          "slug": "forms-input-groups"
-        }
-      ]
+      "slug": "account-user",
+      "url": "user-manage/users"
     },
     {
-      "name": "Form Layouts",
-      "icon": "menu-icon tf-icons bx bx-detail",
-      "slug": "form-layouts",
-      "submenu": [
-        {
-          "url": "form/layouts-vertical",
-          "name": "Vertical Form",
-          "slug": "form-layouts-vertical"
-        },
-        {
-          "url": "form/layouts-horizontal",
-          "name": "Horizontal Form",
-          "slug": "form-layouts-horizontal"
-        }
-      ]
-    },
-    {
-      "url": "tables/basic",
+      "url": "user-manage/admin",
       "icon": "menu-icon tf-icons bx bx-table",
-      "name": "Tables",
-      "slug": "tables-basic"
+      "name": "Admin",
+      "slug": "account-admin"
     },
     {
       "menuHeader": "Misc"

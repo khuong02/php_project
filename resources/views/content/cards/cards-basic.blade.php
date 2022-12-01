@@ -7,8 +7,11 @@
 @endsection
 
 @section('content')
+<h4 class="fw-bold py-3 mb-4">
+  <span class="text-muted fw-light">Questions Management /</span> Topics
+</h4>
 <div class="card">
-  <h5 class="card-header">Quản lý câu hỏi</h5>
+  <h5 class="card-header">Quản lý lĩnh vực</h5>
   <div class="table-responsive text-nowrap">
     <table class="table">
       <thead>
@@ -22,7 +25,7 @@
         @foreach($listTopic as $topic)
         <tr>
           <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$topic->name}}</strong></td>
-          @if($topic->deleted_at === null)  
+          @if($topic->deleted_at === null)
           <td><span class="badge bg-label-primary me-1">
             Active
             @else
@@ -42,7 +45,7 @@
           </td>
         </tr>
         @endforeach
-        
+
       </tbody>
     </table>
   </div>
