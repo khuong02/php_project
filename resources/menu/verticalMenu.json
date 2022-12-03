@@ -22,14 +22,14 @@
     {
       "name": "Topics",
       "icon": "menu-icon tf-icons bx bx-collection",
-      "slug": "cards-basic",
-      "url": "/cards/basic"
+      "slug": "topics",
+      "url": "/topics"
     },
     {
       "name": "Questions",
       "icon": "menu-icon tf-icons bx bx-collection",
-      "slug": "perfect-scrollbar",
-      "url": "extended/ui-perfect-scrollbar"
+      "slug": "questions",
+      "url": "questions"
     },
     {
       "name": "Question Answers",

@@ -8,6 +8,7 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PasswordResetRequestController;
 use App\Http\Controllers\AccountManegementController;
+use App\Http\Controllers\topic\Topic;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,7 +61,13 @@ Route::get('/pages/misc-under-maintenance', $controller_path . '\pages\MiscUnder
 
 
 // cards
-Route::get('/cards/basic', $controller_path . '\cards\CardBasic@index')->name('cards-basic');
+// Route::get('/topics', $controller_path . '\topic\Topic@index')->name('topics');
+
+Route::controller(Topic::class)->group(function () {
+    Route::get('/topics', 'index');
+    Route::post('/topics', 'store');
+    Route::put('topics/{id}', 'delete');
+});
 
 // User Interface
 Route::get('/ui/accordion', $controller_path . '\user_interface\Accordion@index')->name('ui-accordion');
@@ -84,7 +91,7 @@ Route::get('/ui/tooltips-popovers', $controller_path . '\user_interface\Tooltips
 Route::get('/ui/typography', $controller_path . '\user_interface\Typography@index')->name('ui-typography');
 
 // extended ui
-Route::get('/extended/ui-perfect-scrollbar', $controller_path . '\extended_ui\PerfectScrollbar@index')->name('extended-ui-perfect-scrollbar');
+Route::get('/questions', $controller_path . '\question\Questions@index')->name('questions');
 Route::get('/extended/ui-text-divider', $controller_path . '\extended_ui\TextDivider@index')->name('extended-ui-text-divider');
 
 // icons
