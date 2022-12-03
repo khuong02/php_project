@@ -46,7 +46,16 @@ Route::get('/account/edit/{id}', [AccountManegementController::class, 'editAccou
 Route::post('/account/edit', [AccountManegementController::class, 'editAccountAdminPost'])->name('edit-account-admin')->middleware('hendletoken');
 
 
-
+// Route::controller(AccountManegementController::class)->group(
+//     function () {
+//         Route::get('/account', 'Index');
+//         Route::get('/account/admin', 'accountManegementAdmin');
+//         Route::get('/account/user', 'accountManegementUser');
+//         Route::get('/account/edit/{id}', 'editAccountAdmin');
+//         Route::post('/account/delete', 'deleteAccountAdmin');
+//         Route::get('/account/edit', 'editAccountAdminPost');
+//     }
+// );
 
 
 Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name('auth-register-basic');

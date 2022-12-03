@@ -60,8 +60,8 @@
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                 <div class="avatar avatar-online">
 
-                    @if (isset($admiProfile[0]->avatar))
-                        <img src="{{ $admiProfile[0]->avatar }}" alt class="w-px-40 h-auto rounded-circle">
+                    @if (isset($admiProfile->avatar))
+                        <img src="{{ $admiProfile->avatar }}" alt class="w-px-40 h-auto rounded-circle">
                     @else
                         <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle">
                     @endif
@@ -73,9 +73,8 @@
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar avatar-online">
-                                    @if (isset($admiProfile[0]->avatar))
-                                        <img src="{{ $admiProfile[0]->avatar }}" alt
-                                            class="w-px-40 h-auto rounded-circle">
+                                    @if (isset($admiProfile->avatar))
+                                        <img src="{{ $admiProfile->avatar }}" alt class="w-px-40 h-auto rounded-circle">
                                     @else
                                         <img src="{{ asset('assets/img/avatars/1.png') }}" alt
                                             class="w-px-40 h-auto rounded-circle">
@@ -84,8 +83,8 @@
                             </div>
                             <div class="flex-grow-1">
 
-                                @if (isset($admiProfile[0]->username))
-                                    <span class="fw-semibold d-block">{{ $admiProfile[0]->username }}</span>
+                                @if (isset($admiProfile->username))
+                                    <span class="fw-semibold d-block">{{ $admiProfile->username }}</span>
                                 @else
                                     <span class="fw-semibold d-block">John Doe</span>
                                 @endif
