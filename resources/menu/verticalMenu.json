@@ -44,21 +44,6 @@
       "url": "extended/ui-text-divider"
     },
     {
-      "menuHeader": "User management"
-    },
-    {
-      "name": "User",
-      "icon": "menu-icon tf-icons bx bx-detail",
-      "slug": "account-user",
-      "url": "user-manage/users"
-    },
-    {
-      "url": "user-manage/admin",
-      "icon": "menu-icon tf-icons bx bx-table",
-      "name": "Admin",
-      "slug": "account-admin"
-    },
-    {
       "menuHeader": "Misc"
     },
     {
