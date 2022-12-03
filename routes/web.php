@@ -41,9 +41,9 @@ Route::get('/account', [AccountManegementController::class, 'Index'])->name('acc
 Route::post('/account/update-profile', [UserAdminController::class, 'upProfile'])->name('update-profile-admin')->middleware('hendletoken');
 Route::get('/account/admin', [AccountManegementController::class, 'accountManegementAdmin'])->name('account-admin')->middleware('hendletoken');
 Route::get('/account/user', [AccountManegementController::class, 'accountManegementUser'])->name('account-user')->middleware('hendletoken');
-Route::post('/account/delete', [AccountManegementController::class, 'deleteAccountAdmin'])->name('delete-account-admin');
-Route::get('/account/edit/{id}', [AccountManegementController::class, 'editAccountAdmin']);
-Route::post('/account/edit', [AccountManegementController::class, 'editAccountAdminPost'])->name('edit-account-admin');
+Route::post('/account/delete', [AccountManegementController::class, 'deleteAccountAdmin'])->name('delete-account-admin')->middleware('hendletoken');
+Route::get('/account/edit/{id}', [AccountManegementController::class, 'editAccountAdmin'])->middleware('hendletoken');
+Route::post('/account/edit', [AccountManegementController::class, 'editAccountAdminPost'])->name('edit-account-admin')->middleware('hendletoken');
 
 
 

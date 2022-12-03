@@ -70,8 +70,7 @@ class UserAdminController extends Controller
 
             $Admin = new UserAdmin();
             $accountAdmin = $Admin->findAdminByEmail($request->email);
-
-            if ($accountAdmin !== null) {
+            if ($accountAdmin !== null && $accountAdmin->deleted_at === null) {
                 if (Hash::check($request->password, $accountAdmin->password)) {
                     $payload = array(
                         "roles" => 1,

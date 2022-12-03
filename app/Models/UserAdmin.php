@@ -37,7 +37,7 @@ class UserAdmin extends Authenticatable implements JWTSubject
 
     public function getByID($id)
     {
-        return DB::select('select * from table_admins where id = ?', [$id]);
+        return DB::table('table_admins')->where('id', $id)->first();
     }
 
     public function updateAdminProfile($data)
