@@ -48,7 +48,12 @@ class AccountManegementController extends Controller
 
     public function accountManegementUser(Request $request)
     {
-        return view('content.tables.tables-basic');
+        $private_key = env("JWT_SECRET");
+        $cookie = $this->getCookie('token');
+        $jwtToken = $this->jwt->decodedJwt($cookie, $private_key);
+
+        $listAccontAdmin = DB::select('select * from table_admins where id != ? and id != 1', [$jwtToken->uid]);
+        return view('content.tables.tables-basic', ['listAcc' => $listAccontAdmin]);
     }
 
     public function editAccountAdmin(Request $request, $id)
