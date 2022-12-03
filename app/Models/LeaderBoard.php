@@ -34,7 +34,7 @@ class LeaderBoard extends Model
         FROM php_project.leaderboard
         INNER JOIN php_project.users
         where user_id = php_project.users.id
-        order by score,quantity,php_project.leaderboard.time
+        order by score desc, quantity, php_project.leaderboard.time
         limit 10;";
         return DB::select($query);
     }

@@ -15,6 +15,8 @@ class Quizz extends Model
         'name',
     ];
 
+    public $table = 'table_quizzes';
+
     public function getQuizzByID($quizz_id)
     {
         return DB::select('select * from table_quizzes where id = ?', [$quizz_id]);
