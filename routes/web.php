@@ -91,12 +91,11 @@ Route::get('/extended/ui-text-divider', $controller_path . '\extended_ui\TextDiv
 Route::get('/icons/boxicons', $controller_path . '\icons\Boxicons@index')->name('icons-boxicons');
 
 // form elements
-Route::get('/forms/basic-inputs', $controller_path . '\form_elements\BasicInput@index')->name('forms-basic-inputs');
-Route::get('/forms/input-groups', $controller_path . '\form_elements\InputGroups@index')->name('forms-input-groups');
+Route::get('/user-manage/users', $controller_path . '\form_elements\BasicInput@index')->name('forms-basic-inputs');
 
 // form layouts
 Route::get('/form/layouts-vertical', $controller_path . '\form_layouts\VerticalForm@index')->name('form-layouts-vertical');
 Route::get('/form/layouts-horizontal', $controller_path . '\form_layouts\HorizontalForm@index')->name('form-layouts-horizontal');
 
 // tables
-Route::get('/tables/basic', $controller_path . '\tables\Basic@index')->name('tables-basic');
+Route::get('/user-manage/admin', $controller_path . '\tables\Basic@index')->name('tables-basic');

@@ -15,3 +15,5 @@ yarn-error.log
 /.vscode
 serviceAccount.json
 ssl.pem
+app/.DS_Store
+app/Http/.DS_Store
