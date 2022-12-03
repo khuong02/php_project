@@ -18,7 +18,7 @@ class TableAdmins extends Migration
             $table->string('username')->nullable(true);
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('avatar')->default('https://res.cloudinary.com/didqd2uyc/image/upload/v1669794108/mfy7r7izxc29vymozqk0.png');
+            $table->string('avatar')->default('https://res.cloudinary.com/didqd2uyc/image/upload/v1669944586/qouiscgz8h3xl4oy09l1.png');
             $table->softDeletes();
             $table->timestamps();
         });
