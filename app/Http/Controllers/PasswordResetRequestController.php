@@ -11,10 +11,16 @@ use App\Models\User;
 use App\Models\UserAdmin;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
-use Firebase\JWT\JWT;
+use App\Http\Controllers\JwtController;
 
 class PasswordResetRequestController extends Controller
 {
+    private $jwt;
+    public function __construct()
+    {
+        $this->jwt = new JwtController();
+    }
+
     public function sendPasswordResetEmailUser(Request $request)
     {
         if (!$this->validEmail($request->email)) {
@@ -116,7 +122,7 @@ class PasswordResetRequestController extends Controller
                     'token' => $this->generateToken($request->email)
                 )
             );
-            $jwtToken = JWT::encode($payload, $private_key, "HS256");
+            $jwtToken = $this->jwt->encodeJwt($payload, $private_key);
             return $jwtToken;
         } catch (\Throwable $th) {
             throw $th;
@@ -140,7 +146,7 @@ class PasswordResetRequestController extends Controller
                     'token' => $this->generateToken($request->email)
                 )
             );
-            $jwtToken = JWT::encode($payload, $private_key, "HS256");
+            $jwtToken = $this->jwt->encodeJwt($payload, $private_key);
             return $jwtToken;
         } catch (\Throwable $th) {
             throw $th;

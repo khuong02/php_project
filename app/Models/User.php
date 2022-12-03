@@ -44,7 +44,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function updateUserName($data)
     {
-
         return DB::update('update users set username = ?, cost = ?,avatar = ? where id = ?', [$data->username, $data->cost, $data->avatar, $data->id]);
     }
 

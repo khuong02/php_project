@@ -3,17 +3,24 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\Request;
 use App\Models\UserAdmin;
-use Firebase\JWT\JWT;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\validator;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
+use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\JwtController;
 
 class UserAdminController extends Controller
 {
+    private $jwt;
+    private $uploadFile;
+    public function __construct()
+    {
+        $this->jwt = new JwtController();
+        $this->uploadFile = new FileUploadController();
+    }
+
     public function createAccountAdmin(Request $request)
     {
         try {
@@ -60,7 +67,10 @@ class UserAdminController extends Controller
                     'password' => 'min:3|required|string|max:255',
                 ]
             );
-            $accountAdmin = $this->selectAccountAdmin($request->email);
+
+            $Admin = new UserAdmin();
+            $accountAdmin = $Admin->findAdminByEmail($request->email);
+
             if ($accountAdmin !== null) {
                 if (Hash::check($request->password, $accountAdmin->password)) {
                     $payload = array(
@@ -68,13 +78,14 @@ class UserAdminController extends Controller
                         "iat" => $now_seconds,
                         "uid" => $accountAdmin->id,
                     );
-                    $token = JWT::encode($payload, env("JWT_SECRET"), "HS256");
+                    $private_key = env("JWT_SECRET");
+                    $token = $this->jwt->encodeJwt($payload, $private_key);
                     $oneday = 60 * 24;
                     $this->setCookie('token', $token, $oneday);
                     return response()->json(
                         [
                             'erro' => false,
-                            'message' => 'Logged in successfully'
+                            'message' => 'Logged in successfully',
                         ],
                         200
                     );
@@ -126,6 +137,11 @@ class UserAdminController extends Controller
         }
     }
 
+    private function getCookie($cookieName)
+    {
+        return cookie::get($cookieName);
+    }
+
     public function adminLogOut(Request $request)
     {
         try {
@@ -136,8 +152,43 @@ class UserAdminController extends Controller
         }
     }
 
-    private function selectAccountAdmin($email)
+    public function upProfile(Request $request)
     {
-        return DB::table('table_admins')->where('email', $email)->first();
+        try {
+            $request->validate(
+                [
+                    'username' => 'string|max:255',
+                    'email' => 'string|email|max:255',
+                ]
+            );
+            $cookie = $this->getCookie('token');
+            $private_key = env('JWT_SECRET');
+            $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
+
+            $id = $decodoJwt->uid;
+            $userAdmin = UserAdmin::where('id', $id)->first();
+            if ($request->hasFile('avatar')) {
+                $userAdmin->update([
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'avatar' => $this->uploadFile->storeUploads($request, 'avatar')
+                ]);
+            } else {
+                $userAdmin->update([
+                    'username' => $request->username,
+                    'email' => $request->email,
+                ]);
+            }
+            $userAdmin->save();
+            return response()->json([
+                'status' => 200,
+                'message' => "update successfully!"
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => 500,
+                "message" => "update failed!"
+            ], 500);
+        }
     }
 }
