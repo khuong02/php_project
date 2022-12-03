@@ -43,10 +43,16 @@
       "menuHeader": "Account Management"
     },
     {
-      "url": "/Account",
+      "url": "/account/admin",
       "icon": "menu-icon tf-icons bx bx-user-circle",
-      "name": "Account",
-      "slug": "account-management"
+      "name": "Account-admin",
+      "slug": "account-admin"
+    },
+    {
+      "url": "/account/user",
+      "icon": "menu-icon tf-icons bx bx-user-circle",
+      "name": "Account-user",
+      "slug": "account-user"
     },
     {
       "name": "Authentications",
