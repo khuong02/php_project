@@ -23,11 +23,11 @@
                 <form id="formAccountSettings" method="POST" action="{{ route('edit-account-admin') }}"
                     enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" value="{{ $accountEdit[0]->id }}" name="idUpdate">
+                    <input type="hidden" value="{{ $accountEdit->id }}" name="idUpdate">
                     <div class="card-body">
                         <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img src="{{ $accountEdit[0]->avatar }}" alt="user-avatar" class="d-block rounded"
-                                height="100" width="100" id="uploadedAvatar" />
+                            <img src="{{ $accountEdit->avatar }}" alt="user-avatar" class="d-block rounded" height="100"
+                                width="100" id="uploadedAvatar" />
                         </div>
                     </div>
                     <hr class="my-0">
@@ -36,26 +36,26 @@
                             <div class="mb-3 col-md-6">
                                 <label for="firstName" class="form-label">User Name</label>
                                 <input class="form-control" type="text" id="firstName" name="username"
-                                    value="{{ $accountEdit[0]->username }}" autofocus readonly />
+                                    value="{{ $accountEdit->username }}" autofocus readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">E-mail</label>
                                 <input class="form-control" type="text" id="email" name="email"
-                                    value="{{ $accountEdit[0]->email }}" placeholder="john.doe@example.com" readonly />
+                                    value="{{ $accountEdit->email }}" placeholder="john.doe@example.com" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address" class="form-label">Created At</label>
                                 <input type="datetime" class="form-control" id="address" name="created_at"
-                                    placeholder="Address" value="{{ $accountEdit[0]->created_at }}" readonly />
+                                    placeholder="Address" value="{{ $accountEdit->created_at }}" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address" class="form-label">Update Lần Cuối</label>
                                 <input type="datetime" class="form-control" id="address" name="updated_at"
-                                    placeholder="Address" value="{{ $accountEdit[0]->updated_at }}" readonly />
+                                    placeholder="Address" value="{{ $accountEdit->updated_at }}" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <select class="form-control" name="status">
-                                    @if ($accountEdit[0]->deleted_at == null)
+                                    @if ($accountEdit->deleted_at == null)
                                         <option value="1" selected>Hoạt động</option>
                                         <option value="0">Không Hoạt động</option>
                                     @else
