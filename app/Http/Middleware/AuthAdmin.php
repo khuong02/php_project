@@ -28,7 +28,6 @@ class AuthAdmin
                 $decoded = JWT::decode($cookie, new Key(env('JWT_SECRET'), 'HS256'));
                 $userAdmin = new UserAdmin();
                 $userLogin = $userAdmin->getByID($decoded->uid);
-                // dd($userLogin->deleted_at == null);
                 if ($userLogin === null || $userLogin->deleted_at !== null) {
                     Cookie::queue(Cookie::forget('token'));
                     return redirect('/auth/login');

@@ -42,6 +42,12 @@ class User extends Authenticatable implements JWTSubject
         return DB::select('select * from users where id = ?', [$id]);
     }
 
+    public function getByIdv2($id)
+    {
+        return DB::table('users')->join('accounts', 'users.id', '=', 'accounts.user_id')
+            ->select('users.*', 'accounts.deleted_at')->get()->where('id', '=', $id)->first();
+    }
+
     public function updateUserName($data)
     {
         return DB::update('update users set username = ?, cost = ?,avatar = ? where id = ?', [$data->username, $data->cost, $data->avatar, $data->id]);

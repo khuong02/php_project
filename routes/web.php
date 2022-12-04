@@ -37,25 +37,18 @@ Route::get('/auth/logout', [UserAdminController::class, 'adminLogOut'])->name('l
 Route::get('/change-password/{token}', [ChangePasswordController::class, 'getFormResetPassword']);
 Route::post('/change-password', [ChangePasswordController::class, 'passwordReset'])->name('change-password');
 
-Route::get('/account', [AccountManegementController::class, 'Index'])->name('account-profile')->middleware('hendletoken');
+Route::get('/account', [AccountManegementController::class, 'updateProfileUser'])->name('account-profile')->middleware('hendletoken');
 Route::post('/account/update-profile', [UserAdminController::class, 'upProfile'])->name('update-profile-admin')->middleware('hendletoken');
 Route::get('/account/admin', [AccountManegementController::class, 'accountManegementAdmin'])->name('account-admin')->middleware('hendletoken');
 Route::get('/account/user', [AccountManegementController::class, 'accountManegementUser'])->name('account-user')->middleware('hendletoken');
-Route::post('/account/delete', [AccountManegementController::class, 'deleteAccountAdmin'])->name('delete-account-admin')->middleware('hendletoken');
-Route::get('/account/edit/{id}', [AccountManegementController::class, 'editAccountAdmin'])->middleware('hendletoken');
-Route::post('/account/edit', [AccountManegementController::class, 'editAccountAdminPost'])->name('edit-account-admin')->middleware('hendletoken');
+Route::post('/account-admin/delete', [AccountManegementController::class, 'deleteAccountAdmin'])->name('delete-account-admin')->middleware('hendletoken');
+Route::post('/account-user/delete', [AccountManegementController::class, 'deleteAccountUser'])->name('delete-account-user')->middleware('hendletoken');
+Route::get('/account-admin/edit/{id}', [AccountManegementController::class, 'editAccountAdmin'])->middleware('hendletoken');
+Route::get('/account-user/edit/{id}', [AccountManegementController::class, 'editAccountUser'])->middleware('hendletoken');
 
+Route::post('/account-admin/edit', [AccountManegementController::class, 'editAccountAdminPost'])->name('edit-account-admin')->middleware('hendletoken');
+Route::post('/account-user/edit', [AccountManegementController::class, 'editAccountUserPost'])->name('edit-account-user')->middleware('hendletoken');
 
-// Route::controller(AccountManegementController::class)->group(
-//     function () {
-//         Route::get('/account', 'Index');
-//         Route::get('/account/admin', 'accountManegementAdmin');
-//         Route::get('/account/user', 'accountManegementUser');
-//         Route::get('/account/edit/{id}', 'editAccountAdmin');
-//         Route::post('/account/delete', 'deleteAccountAdmin');
-//         Route::get('/account/edit', 'editAccountAdminPost');
-//     }
-// );
 
 
 Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name('auth-register-basic');
