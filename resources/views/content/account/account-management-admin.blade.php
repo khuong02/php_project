@@ -36,7 +36,7 @@
                             <td>
                                 <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                        class="avatar avatar-xs pull-up" title="Lilian Fuller">
+                                        class="avatar avatar-xs pull-up" title="{{ $itemAcc->username }}">
                                         <img src="{{ $itemAcc->avatar }}" alt="Avatar" class="rounded-circle">
                                     </li>
                                 </ul>
@@ -49,10 +49,17 @@
                                 @endif
                             </td>
                             <td>
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" id="delete"
-                                    data-bs-target="#deleteAccount" data-id="{{ $itemAcc->id }}">
-                                    <i class="bx bx-trash me-1"></i> Delete
-                                </button>
+                                @if ($itemAcc->deleted_at == null)
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                        id="delete" data-bs-target="#deleteAccount" data-id="{{ $itemAcc->id }}">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                @else
+                                    <button type="button" class="btn btn-outline-danger" disabled data-bs-toggle="modal"
+                                        id="delete" data-bs-target="#deleteAccount" data-id="{{ $itemAcc->id }}">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -68,10 +75,59 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">CREATE TOPIC</h5>
+                    <h5 class="modal-title" id="exampleModalLabel1">CREATE ACCOUNT</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="#">
+                    @csrf
+                    <div class="row">
+                        <div class="demo-vertical-spacing demo-only-element col-md-8 ">
+
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon11">@</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                                    aria-describedby="basic-addon11" />
+                            </div>
+
+                            <div class="form-password-toggle">
+                                <label class="form-label" for="basic-default-password12">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="basic-default-password12"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="basic-default-password" />
+                                    <span id="basic-default-password" class="input-group-text cursor-pointer"><i
+                                            class="bx bx-hide"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Recipient's username"
+                                    aria-label="Recipient's username" aria-describedby="basic-addon13" />
+                                <span class="input-group-text" id="basic-addon13">@example.com</span>
+                            </div>
+
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon14">https://example.com/users/</span>
+                                <input type="text" class="form-control" placeholder="URL" id="basic-url1"
+                                    aria-describedby="basic-addon14" />
+                            </div>
+
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" placeholder="Amount"
+                                    aria-label="Amount (to the nearest dollar)" />
+                                <span class="input-group-text">.00</span>
+                            </div>
+
+                            <div class="input-group">
+                                <span class="input-group-text">With textarea</span>
+                                <textarea class="form-control" aria-label="With textarea" placeholder="Comment"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                {{-- <form method="POST" action="#">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -86,7 +142,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Create</button>
                     </div>
-                </form>
+                </form> --}}
             </div>
         </div>
     </div>
@@ -107,7 +163,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col mb-3">
-                                <h5>Are you sure want to delete this topic!!</h5>
+                                <h5>Are you sure want to delete this Account!!</h5>
                             </div>
                         </div>
                     </div>

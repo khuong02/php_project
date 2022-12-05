@@ -46,13 +46,19 @@
                                 @endif
                             </td>
                             <td>
-                                <form class="deleteAcc" action="{{ route('delete-account-user') }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="deleteIdValue" value="{{ $user->id }}" />
-                                    <button type="submit" class="btn btn-outline-danger">
+
+
+                                @if ($user->deleted_at == null)
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                        id="delete" data-bs-target="#deleteAccount" data-id="{{ $user->id }}">
                                         <i class="bx bx-trash me-1"></i> Delete
                                     </button>
-                                </form>
+                                @else
+                                    <button type="button" class="btn btn-outline-danger" disabled data-bs-toggle="modal"
+                                        id="delete" data-bs-target="#deleteAccount" data-id="{{ $user->id }}">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -62,41 +68,46 @@
     </div>
     <!--/ Basic Bootstrap Table -->
 
+
+    {{-- Start modal delete --}}
+    <div class="modal fade" id="deleteAccount" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">DELETE CONFIRM</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="fromDeleteAccount" action="{{ route('delete-account-user') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="deleteIdValue" value="" id="valueDelete" />
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <h5>Are you sure want to delete this Account!!</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- End modal delete --}}
+
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
 
     <script type="text/javascript">
-        $(function() {
-            $(".deleteAcc").on("submit", function(e) { //id of form
-                e.preventDefault();
+        $(document).on("click", "#delete", function() {
+            var eventId = $(this).data('id');
+            document.getElementById('valueDelete').value = eventId;
 
-                if (confirm('Are you sure delete account ?')) {
-                    var action = $(this).attr("action"); //get submit action from form
-                    var method = $(this).attr("method"); // get submit method
-                    var form_data = new FormData($(this)[0]); // convert form into formdata
-                    var form = $(this);
-                    $.ajax({
-                        url: action,
-                        dataType: 'json', // what to expect back from the server
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: form_data,
-                        type: method,
-                        success: function(response) {
-                            if (!response.erro) {
-                                location.reload(true);
-                            }
-                        },
-                        error: function(response) { // handle the error
-                            alert(response.responseJSON.message);
-                        },
-                    })
-                }
-            });
         });
 
         $(function() {
-            $("#editAcc").on("submit", function(e) { //id of form
+            $("#fromDeleteAccount").on("submit", function(e) { //id of form
                 e.preventDefault();
                 var action = $(this).attr("action"); //get submit action from form
                 var method = $(this).attr("method"); // get submit method
@@ -116,10 +127,10 @@
                         }
                     },
                     error: function(response) { // handle the error
-                        alert(response.responseJSON.message);
+                        // alert(response.responseJSON.message);
+                        location.reload(true);
                     },
                 })
-
             });
         });
     </script>

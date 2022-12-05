@@ -25,6 +25,7 @@ class User extends Authenticatable implements JWTSubject
         'username',
         'email',
         'avatar',
+        'cost'
     ];
 
     public function setProfile($req)

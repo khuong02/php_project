@@ -51,6 +51,16 @@ class AccountManegementController extends Controller
     public function deleteAccountAdmin(Request $request)
     {
         try {
+            if ($request->deleteIdValue == 1) {
+                return response()->json(
+                    [
+                        'erro' => true,
+                        'message' => 'You do not have permission to delete this account'
+                    ],
+                    400
+                );
+            }
+
             if (UserAdmin::where('id', '=', $request->deleteIdValue)->delete()) {
                 return response()->json(
                     [
@@ -148,7 +158,25 @@ class AccountManegementController extends Controller
         try {
             if ($request->status == 1) {
                 Account::withTrashed()->where('user_id', '=', $request->idUpdate)->restore();
+                $user = new User();
+                $userUpdate = $user->where('id', '=', $request->idUpdate);
+                $userUpdate->update(
+                    [
+                        'username' => $request->username,
+                        'email' => $request->email,
+                        'cost' => $request->cost
+                    ]
+                );
             } else {
+                $user = new User();
+                $userUpdate = $user->where('id', '=', $request->idUpdate);
+                $userUpdate->update(
+                    [
+                        'username' => $request->username,
+                        'email' => $request->email,
+                        'cost' => $request->cost
+                    ]
+                );
                 Account::where('user_id', '=', $request->idUpdate)->delete();
             }
             return response()->json(
@@ -159,6 +187,7 @@ class AccountManegementController extends Controller
                 200
             );
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json(
                 [
                     'erro' => false,
