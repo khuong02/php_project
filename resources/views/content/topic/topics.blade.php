@@ -163,10 +163,6 @@
                                     if(value.deleted_at == null){
                                         appenddata+='<td><span class="badge bg-label-primary me-1">\
                                     Active';
-                                    }else{
-                                        appenddata+='<td><span class="badge bg-label-warning me-1">\
-                                    Inactive';
-                                    }
                                     appenddata+='</span></td>\
                                 <td>\
                                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletetopic" data-id="'+value.id+'">\
@@ -175,6 +171,18 @@
                                     </div>\
                                 </td>\
                                 </tr>';
+                                    }else{
+                                        appenddata+='<td><span class="badge bg-label-warning me-1">\
+                                    Inactive';
+                                    appenddata+='</span></td>\
+                                <td>\
+                                        <button type="button" class="btn btn-outline-danger" disabled data-bs-toggle="modal" id="delete" data-bs-target="#deletetopic" data-id="'+value.id+'">\
+                                            <i class="bx bx-trash me-1"></i> Delete\
+                                        </button>\
+                                    </div>\
+                                </td>\
+                                </tr>';
+                                    }
                             $('tbody').html(appenddata);
                         });
                     }
