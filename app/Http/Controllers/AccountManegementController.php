@@ -156,24 +156,19 @@ class AccountManegementController extends Controller
     public function editAccountUserPost(Request $request)
     {
         try {
+            $user = new User();
             if ($request->status == 1) {
                 Account::withTrashed()->where('user_id', '=', $request->idUpdate)->restore();
-                $user = new User();
                 $userUpdate = $user->where('id', '=', $request->idUpdate);
                 $userUpdate->update(
                     [
-                        'username' => $request->username,
-                        'email' => $request->email,
                         'cost' => $request->cost
                     ]
                 );
             } else {
-                $user = new User();
                 $userUpdate = $user->where('id', '=', $request->idUpdate);
                 $userUpdate->update(
                     [
-                        'username' => $request->username,
-                        'email' => $request->email,
                         'cost' => $request->cost
                     ]
                 );
@@ -187,7 +182,6 @@ class AccountManegementController extends Controller
                 200
             );
         } catch (\Throwable $th) {
-            dd($th);
             return response()->json(
                 [
                     'erro' => false,
@@ -197,7 +191,6 @@ class AccountManegementController extends Controller
             );
         }
     }
-
 
     public function deleteAccountUser(Request $request)
     {

@@ -33,6 +33,7 @@ class AuthAdmin
                     return redirect('/auth/login');
                 } else {
                     $request->attributes->add(['user_id' => $decoded->uid]);
+                    // $request->headers->add(['token' =>])
                     return redirect('/');
                 }
             } else {

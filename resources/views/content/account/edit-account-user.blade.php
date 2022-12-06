@@ -36,12 +36,12 @@
                             <div class="mb-3 col-md-6">
                                 <label for="firstName" class="form-label">User Name</label>
                                 <input class="form-control" type="text" id="firstName" name="username"
-                                    value="{{ $accountEdit->username }}" autofocus />
+                                    value="{{ $accountEdit->username }}" autofocus readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">E-mail</label>
                                 <input class="form-control" type="text" id="email" name="email"
-                                    value="{{ $accountEdit->email }}" placeholder="john.doe@example.com" />
+                                    value="{{ $accountEdit->email }}" placeholder="john.doe@example.com" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">Cost</label>

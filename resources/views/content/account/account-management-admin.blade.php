@@ -71,82 +71,71 @@
 
 
     <!-- Start Modal Create -->
+    <!-- Modal -->
     <div class="modal fade" id="createAccount" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">CREATE ACCOUNT</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="POST" action="#">
-                    @csrf
-                    <div class="row">
-                        <div class="demo-vertical-spacing demo-only-element col-md-8 ">
-
-                            <div class="input-group">
-                                <span class="input-group-text" id="basic-addon11">@</span>
-                                <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                                    aria-describedby="basic-addon11" />
-                            </div>
-
-                            <div class="form-password-toggle">
-                                <label class="form-label" for="basic-default-password12">Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="basic-default-password12"
-                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        aria-describedby="basic-default-password" />
-                                    <span id="basic-default-password" class="input-group-text cursor-pointer"><i
-                                            class="bx bx-hide"></i></span>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Recipient's username"
-                                    aria-label="Recipient's username" aria-describedby="basic-addon13" />
-                                <span class="input-group-text" id="basic-addon13">@example.com</span>
-                            </div>
-
-                            <div class="input-group">
-                                <span class="input-group-text" id="basic-addon14">https://example.com/users/</span>
-                                <input type="text" class="form-control" placeholder="URL" id="basic-url1"
-                                    aria-describedby="basic-addon14" />
-                            </div>
-
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-                                <input type="text" class="form-control" placeholder="Amount"
-                                    aria-label="Amount (to the nearest dollar)" />
-                                <span class="input-group-text">.00</span>
-                            </div>
-
-                            <div class="input-group">
-                                <span class="input-group-text">With textarea</span>
-                                <textarea class="form-control" aria-label="With textarea" placeholder="Comment"></textarea>
-                            </div>
-
-                        </div>
+            <form id="fromCraeteAccount" action="{{ url('/api/registerAdmin') }}" method="post">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Create Account Admin</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </form>
-                {{-- <form method="POST" action="#">
-                    @csrf
+
                     <div class="modal-body">
                         <div class="row">
                             <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">Name</label>
-                                <input type="text" id="nameBasic" name="nametopic" class="form-control"
-                                    placeholder="Enter Name">
+                                <label for="nameBasic" class="form-label">User Name</label>
+                                <input type="text" name="username" id="userName" class="form-control"
+                                    placeholder="Enter UserName">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Email</label>
+                                <input type="text" name="email" id="email" class="form-control"
+                                    placeholder="Enter Email">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="emailBasic" class="form-label">Password</label>
+                                <input type="password" name="password" id="emailBasic" class="form-control"
+                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;">
+                            </div>
+                            <div class="col mb-3    ">
+                                <label for="dobBasic" class="form-label">Confirm Password</label>
+                                <input type="password" name="password_confirmation" id="dobBasic" class="form-control"
+                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;">
                             </div>
                         </div>
                     </div>
+                    <input hidden name="token" value="{{ Cookie::get('token') }}">
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Craete account</button>
                     </div>
-                </form> --}}
-            </div>
+                </div>
+            </form>
         </div>
     </div>
     {{-- End modal create --}}
+
+
+    <!-- Toast with Placements -->
+    <div class="bs-toast toast toast-placement-ex m-2 top-0 end-0 " role="alert" aria-live="assertive"
+        aria-atomic="true" data-delay="2000">
+        <div class="toast-header">
+            <i class='bx bx-bell me-2'></i>
+            <div class="me-auto fw-semibold">Bootstrap</div>
+            <small>11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
+        </div>
+    </div>
+    <!-- Toast with Placements -->
 
 
     {{-- Start modal delete --}}
@@ -168,7 +157,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Delete</button>
                     </div>
                 </form>
@@ -184,7 +173,7 @@
             document.getElementById('valueDelete').value = eventId;
 
         });
-
+        // delete account
         $(function() {
             $("#fromDeleteAccount").on("submit", function(e) { //id of form
                 e.preventDefault();
@@ -206,12 +195,38 @@
                         }
                     },
                     error: function(response) { // handle the error
-                        // alert(response.responseJSON.message);
-                        location.reload(true);
+                        alert(response.responseJSON.message);
+                        // location.reload(true);
+                    },
+                })
+            });
+        });
+        // craete account
+        $(function() {
+            $("#fromCraeteAccount").on("submit", function(e) { //id of form
+                e.preventDefault();
+                var action = $(this).attr("action"); //get submit action from form
+                var method = $(this).attr("method"); // get submit method
+                var form_data = new FormData($(this)[0]); // convert form into formdata
+                var form = $(this);
+                $.ajax({
+                    url: action,
+                    dataType: 'json', // what to expect back from the server
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    type: method,
+                    success: function(response) {
+                        if (!response.erro) {
+                            location.reload(true);
+                        }
+                    },
+                    error: function(response) { // handle the error
+                        alert(response.responseJSON.message);
                     },
                 })
             });
         });
     </script>
-
 @endsection

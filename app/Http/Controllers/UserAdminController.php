@@ -24,6 +24,19 @@ class UserAdminController extends Controller
     public function createAccountAdmin(Request $request)
     {
         try {
+            $cookie = $request->token;
+            $private_key = env("JWT_SECRET");
+            $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
+            if ($decodoJwt->uid !== 1) {
+                return response()->json(
+                    [
+                        'erro' => true,
+                        'status' => 400,
+                        'message' => "you do not have permission to create an admin account"
+                    ],
+                    400
+                );
+            }
             $validate =  $request->validate(
                 [
                     'username' => 'required|string|max:255',
@@ -41,6 +54,7 @@ class UserAdminController extends Controller
 
             return response()->json(
                 [
+                    'erro' => false,
                     'status' => 201,
                     'message' => 'create account successful',
                 ],
@@ -49,6 +63,7 @@ class UserAdminController extends Controller
         } catch (Exception $err) {
             return response()->json(
                 [
+                    'erro' => true,
                     'status' => 400,
                     'message' => $err->getMessage(),
                 ],
