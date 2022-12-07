@@ -19,6 +19,7 @@ class TableQuizzQuestions extends Migration
             $table->unsignedInteger('difficulty_id');
             $table->string('question')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

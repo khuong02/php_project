@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PasswordResetRequestController;
 use App\Http\Controllers\AccountManegementController;
 use App\Http\Controllers\topic\Topic;
+use App\Http\Controllers\question\QUestions;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +82,13 @@ Route::controller(Topic::class)->group(function () {
     Route::put('topics/{id}', 'update');
 });
 
+Route::controller(Questions::class)->group(function(){
+    Route::get('questions','index')->name('questions');
+    Route::get('questionlist','getQuestionList');
+    Route::post('questions','store')->name('questions-store');
+    Route::delete('questions/{id}','delete')->name('questions-delete');
+});
+
 // User Interface
 Route::get('/ui/accordion', $controller_path . '\user_interface\Accordion@index')->name('ui-accordion');
 Route::get('/ui/alerts', $controller_path . '\user_interface\Alerts@index')->name('ui-alerts');
@@ -103,7 +111,6 @@ Route::get('/ui/tooltips-popovers', $controller_path . '\user_interface\Tooltips
 Route::get('/ui/typography', $controller_path . '\user_interface\Typography@index')->name('ui-typography');
 
 // extended ui
-Route::get('/questions', $controller_path . '\question\Questions@index')->name('questions');
 Route::get('/answers', $controller_path . '\question\Answers@index')->name('answers');
 
 // icons

@@ -11,6 +11,8 @@ use Laravel\Sanctum\HasApiTokens;
 class Difficulty extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    public $table = 'table_difficulties';
     protected $fillable = [
         'name',
     ];
