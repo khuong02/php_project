@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Account;
 use App\Models\UserAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +19,7 @@ class AccountManegementController extends Controller
         $this->jwt = new JwtController();
     }
 
-    public function Index(Request $request)
+    public function updateProfileUser(Request $request)
     {
         try {
             $private_key = env("JWT_SECRET");
@@ -46,9 +48,45 @@ class AccountManegementController extends Controller
         return view('content.account.account-management-admin', ['listAcc' => $listAccontAdmin]);
     }
 
-    public function accountManegementUser(Request $request)
+    public function deleteAccountAdmin(Request $request)
     {
-        return view('content.account.account-management-user');
+        try {
+            if ($request->deleteIdValue == 1) {
+                return response()->json(
+                    [
+                        'erro' => true,
+                        'message' => 'You do not have permission to delete this account'
+                    ],
+                    400
+                );
+            }
+
+            if (UserAdmin::where('id', '=', $request->deleteIdValue)->delete()) {
+                return response()->json(
+                    [
+                        'erro' => false,
+                        'message' => 'delete account successfully'
+                    ],
+                    200
+                );
+            } else {
+                return response()->json(
+                    [
+                        'erro' => true,
+                        'message' => 'The account has been deleted before'
+                    ],
+                    400
+                );
+            }
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'erro' => true,
+                    'message' => 'server erro'
+                ],
+                500
+            );
+        }
     }
 
     public function editAccountAdmin(Request $request, $id)
@@ -57,11 +95,10 @@ class AccountManegementController extends Controller
 
             $userAdmin = new UserAdmin();
             $accountEdit = $userAdmin->getByID($id);
-            // dd($accountEdit);
             if (empty($accountEdit)) {
-                return view('content.pages.pages-misc-under-maintenance');
+                return view('content.pages.pages-misc-error');
             }
-            return view("content.account.edit-account", ['accountEdit' => $accountEdit]);
+            return view('content.account.edit-account-admin', ['accountEdit' => $accountEdit]);
         } catch (\Throwable $th) {
             return view('content.pages.pages-misc-under-maintenance');
         }
@@ -92,10 +129,73 @@ class AccountManegementController extends Controller
             );
         }
     }
-    public function deleteAccountAdmin(Request $request)
+
+
+    public function accountManegementUser(Request $request)
+    {
+        $listUser = DB::table('users')->join('accounts', 'users.id', '=', 'accounts.user_id')
+            ->select('users.*', 'accounts.deleted_at')->get()->toArray();
+        return view('content.account.account-management-user', ['listUser' => $listUser]);
+    }
+
+    public function editAccountUser(Request $request, $id)
     {
         try {
-            if (UserAdmin::where('id', '=', $request->deleteIdValue)->delete()) {
+
+            $user = new User();
+            $accountEdit = $user->getByIdv2($id);
+            if (empty($accountEdit)) {
+                return view('content.pages.pages-misc-error');
+            }
+            return view("content.account.edit-account-user", ['accountEdit' => $accountEdit]);
+        } catch (\Throwable $th) {
+            return view('content.pages.pages-misc-under-maintenance');
+        }
+    }
+
+    public function editAccountUserPost(Request $request)
+    {
+        try {
+            $user = new User();
+            if ($request->status == 1) {
+                Account::withTrashed()->where('user_id', '=', $request->idUpdate)->restore();
+                $userUpdate = $user->where('id', '=', $request->idUpdate);
+                $userUpdate->update(
+                    [
+                        'cost' => $request->cost
+                    ]
+                );
+            } else {
+                $userUpdate = $user->where('id', '=', $request->idUpdate);
+                $userUpdate->update(
+                    [
+                        'cost' => $request->cost
+                    ]
+                );
+                Account::where('user_id', '=', $request->idUpdate)->delete();
+            }
+            return response()->json(
+                [
+                    'erro' => false,
+                    'message' => 'update account successfully'
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'erro' => false,
+                    'message' => 'update account failure'
+                ],
+                400
+            );
+        }
+    }
+
+    public function deleteAccountUser(Request $request)
+    {
+        try {
+            if (Account::where('user_id', '=', $request->deleteIdValue)->delete()) {
                 return response()->json(
                     [
                         'erro' => false,

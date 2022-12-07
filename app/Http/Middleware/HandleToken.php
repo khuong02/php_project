@@ -30,7 +30,6 @@ class HandleToken
             $decoded = JWT::decode($cookie, new Key(env('JWT_SECRET'), 'HS256'));
             $userAdmin = new UserAdmin();
             $userLogin = $userAdmin->getByID($decoded->uid);
-            // dd($userLogin->deleted_at);
             if ($userLogin === null || $userLogin->deleted_at !== null) {
                 return redirect('/auth/login');
             }

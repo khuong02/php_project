@@ -25,6 +25,7 @@ class User extends Authenticatable implements JWTSubject
         'username',
         'email',
         'avatar',
+        'cost'
     ];
 
     public function setProfile($req)
@@ -40,6 +41,12 @@ class User extends Authenticatable implements JWTSubject
     public function getByID($id)
     {
         return DB::select('select * from users where id = ?', [$id]);
+    }
+
+    public function getByIdv2($id)
+    {
+        return DB::table('users')->join('accounts', 'users.id', '=', 'accounts.user_id')
+            ->select('users.*', 'accounts.deleted_at')->get()->where('id', '=', $id)->first();
     }
 
     public function updateUserName($data)

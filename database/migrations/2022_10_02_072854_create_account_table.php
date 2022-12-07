@@ -18,6 +18,7 @@ class CreateAccountTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('email')->unique()->index();
             $table->string('password');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
