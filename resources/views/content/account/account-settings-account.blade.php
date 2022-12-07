@@ -16,10 +16,6 @@
             <ul class="nav nav-pills flex-column flex-md-row mb-3">
                 <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>
                         Account</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('pages/account-settings-notifications') }}"><i
-                            class="bx bx-bell me-1"></i> Notifications</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('pages/account-settings-connections') }}"><i
-                            class="bx bx-link-alt me-1"></i> Connections</a></li>
             </ul>
             <div class="card mb-4">
                 <h5 class="card-header">Profile Details</h5>
@@ -56,14 +52,10 @@
                                 <input class="form-control" type="text" id="firstName" name="username"
                                     value="{{ $admiProfile->username }}" autofocus />
                             </div>
-                            {{-- <div class="mb-3 col-md-6">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input class="form-control" type="text" name="lastName" id="lastName" value="Doe" />
-                            </div> --}}
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">E-mail</label>
                                 <input class="form-control" type="text" id="email" name="email"
-                                    value="{{ $admiProfile->email }}" placeholder="john.doe@example.com" />
+                                    value="{{ $admiProfile->email }}" placeholder="john.doe@example.com" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address" class="form-label">Created At</label>
@@ -75,13 +67,28 @@
                                 <input type="datetime" class="form-control" id="address" name="updated_at"
                                     placeholder="Address" value="{{ $admiProfile->updated_at }}" readonly />
                             </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="firstName" class="form-label">Current password</label>
+                                <input class="form-control" type="text" id="current_password" name="current_password"
+                                    value="" autofocus />
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="firstName" class="form-label">New password</label>
+                                <input class="form-control" type="text" id="new_pasword" name="password" value=""
+                                    autofocus />
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="firstName" class="form-label">Confirm new password</label>
+                                <input class="form-control" type="text" id="password_confirmation" name="cf_password"
+                                    value="" autofocus />
+                            </div>
                             <div class="mt-2">
                                 <button type="submit" class="btn btn-primary me-2">Save changes</button>
                                 <button type="reset" class="btn btn-outline-secondary">Cancel</button>
                             </div>
                             {{-- </form> --}}
                         </div>
-
                 </form>
                 <!-- /Account -->
             </div>
@@ -91,31 +98,31 @@
 
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script>
-        $(function() {
-            $("#formAccountSettings").on("submit", function(e) { //id of form
-                e.preventDefault();
-                var action = $(this).attr("action"); //get submit action from form
-                var method = $(this).attr("method"); // get submit method
-                var form_data = new FormData($(this)[0]); // convert form into formdata
-                var form = $(this);
-                $.ajax({
-                    url: action,
-                    dataType: 'json', // what to expect back from the server
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: form_data,
-                    type: method,
-                    success: function(response) {
-                        if (!response.erro) {
-                            location.reload(true);
-                        }
-                    },
-                    error: function(response) { // handle the error
-                        alert(response.responseJSON.message);
-                    },
-                })
-            });
-        });
+        // $(function() {
+        //     $("#formAccountSettings").on("submit", function(e) { //id of form
+        //         e.preventDefault();
+        //         var action = $(this).attr("action"); //get submit action from form
+        //         var method = $(this).attr("method"); // get submit method
+        //         var form_data = new FormData($(this)[0]); // convert form into formdata
+        //         var form = $(this);
+        //         $.ajax({
+        //             url: action,
+        //             dataType: 'json', // what to expect back from the server
+        //             cache: false,
+        //             contentType: false,
+        //             processData: false,
+        //             data: form_data,
+        //             type: method,
+        //             success: function(response) {
+        //                 if (!response.erro) {
+        //                     location.reload(true);
+        //                 }
+        //             },
+        //             error: function(response) { // handle the error
+        //                 alert(response.responseJSON.message);
+        //             },
+        //         })
+        //     });
+        // });
     </script>
 @endsection

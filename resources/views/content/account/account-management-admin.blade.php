@@ -191,7 +191,13 @@
                     type: method,
                     success: function(response) {
                         if (!response.erro) {
-                            location.reload(true);
+                            // location.reload(true);   
+                            $.toast({
+                                heading: 'Positioning',
+                                text: 'Use the predefined ones, or specify a custom position object.',
+                                position: 'top-right',
+                                stack: false
+                            })
                         }
                     },
                     error: function(response) { // handle the error

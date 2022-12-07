@@ -173,6 +173,9 @@ class UserAdminController extends Controller
                 [
                     'username' => 'string|max:255',
                     'email' => 'string|email|max:255',
+                    'current_password' => 'string|max:255',
+                    'password' => 'string|max:255',
+                    'cf_password' => 'same:password'
                 ]
             );
             $cookie = $this->getCookie('token');
@@ -182,16 +185,47 @@ class UserAdminController extends Controller
             $id = $decodoJwt->uid;
             $userAdmin = UserAdmin::where('id', $id)->first();
             if ($request->hasFile('avatar')) {
-                $userAdmin->update([
-                    'username' => $request->username,
-                    'email' => $request->email,
-                    'avatar' => $this->uploadFile->storeUploads($request, 'avatar')
-                ]);
+                if ($request->current_password !== '') {
+                    if ($this->validPassword($id, $request->current_password)) {
+                        $userAdmin->update([
+                            'username' => $request->username,
+                            'email' => $request->email,
+                            'avatar' => $this->uploadFile->storeUploads($request, 'avatar'),
+                            'password' => Hash::make($request->password)
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => 400,
+                            'message' => "password current Incorrect"
+                        ], 400);
+                    }
+                } else {
+                    $userAdmin->update([
+                        'username' => $request->username,
+                        'email' => $request->email,
+                        'avatar' => $this->uploadFile->storeUploads($request, 'avatar')
+                    ]);
+                }
             } else {
-                $userAdmin->update([
-                    'username' => $request->username,
-                    'email' => $request->email,
-                ]);
+                if ($request->current_password !== '') {
+                    if ($this->validPassword($id, $request->current_password)) {
+                        $userAdmin->update([
+                            'username' => $request->username,
+                            'email' => $request->email,
+                            'password' => Hash::make($request->password)
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => 400,
+                            'message' => "password current Incorrect"
+                        ], 400);
+                    }
+                } else {
+                    $userAdmin->update([
+                        'username' => $request->username,
+                        'email' => $request->email,
+                    ]);
+                }
             }
             $userAdmin->save();
             return response()->json([
@@ -204,5 +238,15 @@ class UserAdminController extends Controller
                 "message" => "update failed!"
             ], 500);
         }
+    }
+
+
+    private function validPassword($id_user, $password)
+    {
+        $user = UserAdmin::where('id', $id_user)->first();
+        if (Hash::check($password, $user->password)) {
+            return true;
+        }
+        return false;
     }
 }
