@@ -1,5 +1,5 @@
 run:
-	@php artisan serve 
+	@php artisan serve
 
 send:
 	@php artisan db:seed
@@ -17,7 +17,7 @@ migrate:
 	@php artisan migrate
 
 clean-cache:
-	@php artisan optimize && php artisan config:cache
+	@php artisan optimize && php artisan config:cache && php artisan config:clear
 
 gen-migrate:
 	@$(eval NAME := $(shell read -p "Enter your file name: " v && echo $$v))

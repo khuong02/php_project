@@ -22,6 +22,10 @@ class Quizz extends Model
         return DB::select('select * from table_quizzes where id = ?', [$quizz_id]);
     }
 
+    public function getQuizByName($name){
+        return DB::select('select * from table_quizzes where name = ?',[$name]);
+    }
+
     public function getList($page, $limit)
     {
         return DB::select(

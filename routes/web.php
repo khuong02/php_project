@@ -73,9 +73,12 @@ Route::get('/pages/misc-under-maintenance', $controller_path . '\pages\MiscUnder
 // Route::get('/topics', $controller_path . '\topic\Topic@index')->name('topics');
 
 Route::controller(Topic::class)->group(function () {
-    Route::get('/topics', 'index');
-    Route::post('/topics', 'store');
-    Route::put('topics/{id}', 'delete');
+    Route::get('topics', 'index')->name('topics');
+    Route::get('topiclist', 'getTopicList');
+    Route::post('topics', 'store')->name('topic-store');
+    Route::get('topics/{id}','edit')->name('topic-edit');
+    Route::delete('topics/{id}', 'delete');
+    Route::put('topics/{id}', 'update');
 });
 
 // User Interface
@@ -101,7 +104,7 @@ Route::get('/ui/typography', $controller_path . '\user_interface\Typography@inde
 
 // extended ui
 Route::get('/questions', $controller_path . '\question\Questions@index')->name('questions');
-Route::get('/extended/ui-text-divider', $controller_path . '\extended_ui\TextDivider@index')->name('extended-ui-text-divider');
+Route::get('/answers', $controller_path . '\question\Answers@index')->name('answers');
 
 // icons
 Route::get('/icons/boxicons', $controller_path . '\icons\Boxicons@index')->name('icons-boxicons');

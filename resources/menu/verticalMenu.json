@@ -40,8 +40,8 @@
     {
       "name": "Question Answers",
       "icon": "menu-icon tf-icons bx bx-collection",
-      "slug": "text-divider",
-      "url": "extended/ui-text-divider"
+      "slug": "answers",
+      "url": "answers"
     },
     {
       "menuHeader": "Misc"
