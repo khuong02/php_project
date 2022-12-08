@@ -117,15 +117,6 @@
                         $('#email').val(response.data.email);
                         $('#cost').val(response.data.cost);
                         $('#update_at').val(response.data.updated_at);
-                        $('#status').empty();
-                        if (response.data.deleted_at == null) {
-                            appendata += `<option value="1" selected>Hoạt động</option>
-                                        <option value="0">Không Hoạt động</option>`;
-                        } else {
-                            appendata += `<option value="0" selected>Không Hoạt động</option>
-                                        <option value="1">Hoạt động</option>`;
-                        }
-                        $('#status').html(appendata);
                         $.toast({
                             heading: 'Success',
                             text: response.message,

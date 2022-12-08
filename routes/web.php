@@ -11,6 +11,7 @@ use App\Http\Controllers\AccountManegementController;
 use App\Http\Controllers\topic\Topic;
 use App\Http\Controllers\question\QUestions;
 use App\Http\Controllers\web\AccountUserManagementController;
+use App\Http\Controllers\web\AccountAdminManagementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,13 +41,27 @@ Route::post('/change-password', [ChangePasswordController::class, 'passwordReset
 
 Route::get('/account', [AccountManegementController::class, 'updateProfileUser'])->name('account-profile')->middleware('hendletoken');
 Route::post('/account/update-profile', [UserAdminController::class, 'upProfile'])->name('update-profile-admin')->middleware('hendletoken');
-Route::get('/account/admin', [AccountManegementController::class, 'accountManegementAdmin'])->name('account-admin')->middleware('hendletoken');
 
 
-Route::post('/account-admin/delete', [AccountManegementController::class, 'deleteAccountAdmin'])->name('delete-account-admin')->middleware('hendletoken');
-Route::get('/account-admin/edit/{id}', [AccountManegementController::class, 'editAccountAdmin'])->middleware('hendletoken');
 
-Route::post('/account-admin/edit', [AccountManegementController::class, 'editAccountAdminPost'])->name('edit-account-admin')->middleware('hendletoken');
+// Account Management user
+Route::controller(AccountUserManagementController::class)->group(function () {
+    Route::get('/account/user', 'index')->name('account-user')->middleware('hendletoken');
+    Route::get('/account/userlist', 'getUserList');
+    Route::get('/account/user/update/{id}', 'getUiUpdateUser')->middleware('hendletoken');
+    Route::put('/account/user/{id}', 'update')->name('edit-account-user')->middleware('hendletoken');
+    Route::delete('/account/user/{id}', 'delete')->middleware('hendletoken');
+});
+
+// Account Management admin
+Route::controller(AccountAdminManagementController::class)->group(function () {
+    Route::get('/account/admin', 'index')->name('account-admin')->middleware('hendletoken');
+    Route::get('/account/adminlist', 'getAdminList');
+    Route::get('/account/admin/update/{id}', 'getUiUpdateUser')->middleware('hendletoken');
+    Route::put('/accout/admin/{id}', 'update')->name('edit-account-admin')->middleware('hendletoken');
+    Route::post('/account/admin', 'store')->middleware('hendletoken');
+    Route::delete('/account/admin/{id}', 'delete')->middleware('hendletoken');
+});
 
 
 
@@ -71,13 +86,7 @@ Route::get('/pages/misc-under-maintenance', $controller_path . '\pages\MiscUnder
 // cards
 // Route::get('/topics', $controller_path . '\topic\Topic@index')->name('topics');
 
-Route::controller(AccountUserManagementController::class)->group(function () {
-    Route::get('/account/user', 'index')->name('account-user')->middleware('hendletoken');
-    Route::get('/account/userlist', 'getUserList');
-    Route::get('/account/user/update/{id}', 'getUiUpdateUser')->middleware('hendletoken');
-    Route::put('/account/user/{id}', 'update')->name('edit-account-user')->middleware('hendletoken');
-    Route::delete('/account/user/{id}', 'delete')->middleware('hendletoken');
-});
+
 
 
 Route::controller(Topic::class)->group(function () {

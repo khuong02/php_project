@@ -1,19 +1,98 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Tables - Basic Tables')
+@section('title', 'Account Admin - Management')
+
+@section('vendor-script')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+        integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
+@endsection
 
 @section('content')
     <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Managetment /</span> Account Admin
+        <span class="text-muted fw-light">Managetment /</span> Account User
     </h4>
     <p>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAccount">
             Create a new Account
         </button>
     </p>
-    <!-- Basic Bootstrap Table -->
+    <!-- Start Modal Create -->
+    <div class="modal fade" id="createAccount" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            {{-- <form id="fromCraeteAccount" action="{{ url('/api/registerAdmin') }}" method="post">
+                @csrf --}}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Create Account Admin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">User Name</label>
+                            <input type="text" name="username" id="username" class="form-control"
+                                placeholder="Enter UserName">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">Email</label>
+                            <input type="text" name="email" id="email" class="form-control"
+                                placeholder="Enter Email">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="emailBasic" class="form-label">Password</label>
+                            <input type="password" name="password" id="password" class="form-control"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;">
+                        </div>
+                        <div class="col mb-3    ">
+                            <label for="dobBasic" class="form-label">Confirm Password</label>
+                            <input type="password" name="password_confirmation" id="cf_password" class="form-control"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;">
+                        </div>
+                    </div>
+                </div>
+                <input hidden name="token" id="token" value="{{ Cookie::get('token') }}">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btnCraete">Craete account</button>
+                </div>
+            </div>
+            {{-- </form> --}}
+        </div>
+    </div>
+    {{-- End modal create --}}
+    {{-- Start modal delete --}}
+    <div class="modal fade" id="deleteAccount" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">DELETE CONFIRM</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" name="deleteIdValue" value="" id="valueDelete" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <h5>Are you sure want to delete this Account!!</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btnDelete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End modal delete --}}
     <div class="card">
-        <h5 class="card-header">Account Admin</h5>
+        <h5 class="card-header">Quản Lý Account User</h5>
         <div class="table-responsive text-nowrap">
             <table class="table">
                 <thead>
@@ -26,212 +105,166 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @foreach ($listAcc as $itemAcc)
-                        <tr>
-                            <td>
-                                <a href="/account-admin/edit/{{ $itemAcc->id }}"><i
-                                        class="fab fa-angular fa-lg text-danger me-3"></i><strong>{{ $itemAcc->username }}</strong></a>
-                            </td>
-                            <td>{{ $itemAcc->email }}</td>
-                            <td>
-                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                        class="avatar avatar-xs pull-up" title="{{ $itemAcc->username }}">
-                                        <img src="{{ $itemAcc->avatar }}" alt="Avatar" class="rounded-circle">
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                @if ($itemAcc->deleted_at == null)
-                                    <span class="badge bg-label-primary me-1">Active</span>
-                                @else
-                                    <span class="badge bg-label-warning me-1">InActive</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($itemAcc->deleted_at == null)
-                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                        id="delete" data-bs-target="#deleteAccount" data-id="{{ $itemAcc->id }}">
-                                        <i class="bx bx-trash me-1"></i> Delete
-                                    </button>
-                                @else
-                                    <button type="button" class="btn btn-outline-danger" disabled data-bs-toggle="modal"
-                                        id="delete" data-bs-target="#deleteAccount" data-id="{{ $itemAcc->id }}">
-                                        <i class="bx bx-trash me-1"></i> Delete
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-    <!--/ Responsive Table -->
+@endsection
 
-
-    <!-- Start Modal Create -->
-    <!-- Modal -->
-    <div class="modal fade" id="createAccount" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form id="fromCraeteAccount" action="{{ url('/api/registerAdmin') }}" method="post">
-                @csrf
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">Create Account Admin</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">User Name</label>
-                                <input type="text" name="username" id="userName" class="form-control"
-                                    placeholder="Enter UserName">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">Email</label>
-                                <input type="text" name="email" id="email" class="form-control"
-                                    placeholder="Enter Email">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="emailBasic" class="form-label">Password</label>
-                                <input type="password" name="password" id="emailBasic" class="form-control"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;">
-                            </div>
-                            <div class="col mb-3    ">
-                                <label for="dobBasic" class="form-label">Confirm Password</label>
-                                <input type="password" name="password_confirmation" id="dobBasic" class="form-control"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;">
-                            </div>
-                        </div>
-                    </div>
-                    <input hidden name="token" value="{{ Cookie::get('token') }}">
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Craete account</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    {{-- End modal create --}}
-
-
-    <!-- Toast with Placements -->
-    <div class="bs-toast toast toast-placement-ex m-2 top-0 end-0 " role="alert" aria-live="assertive"
-        aria-atomic="true" data-delay="2000">
-        <div class="toast-header">
-            <i class='bx bx-bell me-2'></i>
-            <div class="me-auto fw-semibold">Bootstrap</div>
-            <small>11 mins ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
-        </div>
-    </div>
-    <!-- Toast with Placements -->
-
-
-    {{-- Start modal delete --}}
-    <div class="modal fade" id="deleteAccount" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">DELETE CONFIRM</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="fromDeleteAccount" action="{{ route('delete-account-admin') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="deleteIdValue" value="" id="valueDelete" />
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <h5>Are you sure want to delete this Account!!</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Delete</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    {{-- End modal delete --}}
-
+@section('page-script')
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
-    <script type="text/javascript">
-        $(document).on("click", "#delete", function() {
-            var eventId = $(this).data('id');
-            document.getElementById('valueDelete').value = eventId;
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
+        integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function() {
+            getUserData();
 
-        });
-        // delete account
-        $(function() {
-            $("#fromDeleteAccount").on("submit", function(e) { //id of form
-                e.preventDefault();
-                var action = $(this).attr("action"); //get submit action from form
-                var method = $(this).attr("method"); // get submit method
-                var form_data = new FormData($(this)[0]); // convert form into formdata
-                var form = $(this);
+            function getUserData() {
                 $.ajax({
-                    url: action,
-                    dataType: 'json', // what to expect back from the server
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: form_data,
-                    type: method,
-                    success: function(response) {
-                        if (!response.erro) {
-                            // location.reload(true);   
-                            $.toast({
-                                heading: 'Positioning',
-                                text: 'Use the predefined ones, or specify a custom position object.',
-                                position: 'top-right',
-                                stack: false
-                            })
-                        }
-                    },
-                    error: function(response) { // handle the error
-                        alert(response.responseJSON.message);
-                        // location.reload(true);
-                    },
+                    type: 'GET',
+                    url: '/account/adminlist',
+                    dataType: 'json',
+                    success: function(resource) {
+                        $('tbody').html('');
+                        var appendata = '';
+                        $.each(resource.users, function(key, value) {
+                            appendata += `<tr>
+                                <td>
+                                    <a href="/account/admin/update/${value.id}"><i
+                                    class="fab fa-angular fa-lg text-danger me-3"></i><strong>${value.username}</strong></a>
+                                </td>
+                                <td>${value.email}</td>
+                                <td>
+                                    <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                        <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
+                                            class="avatar avatar-xs pull-up" title="${value.username}">
+                                            <img src=" ${value.avatar}" alt="Avatar" class="rounded-circle">
+                                        </li>
+                                    </ul>
+                                </td>
+                                `;
+                            if (value.deleted_at == null) {
+                                appendata += `
+                                <td>
+                                    <span class="badge bg-label-primary me-1">Active</span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                        id="delete" data-bs-target="#deleteAccount" data-id="${value.id}">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                </td>
+                                    `;
+                            } else {
+                                appendata += `
+                                <td>
+                                    <span class="badge bg-label-warning me-1">InActive</span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                        id="delete" data-bs-target="#deleteAccount" disabled data-id="${value.id}">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                </td>
+                                    `;
+                            }
+                            $('tbody').html(appendata);
+                        })
+                    }
                 })
+            };
+            //click delete account
+            $(document).on("click", "#delete", function(e) {
+                var eventId = $(this).data('id');
+                document.getElementById('valueDelete').value = eventId;
             });
-        });
-        // craete account
-        $(function() {
-            $("#fromCraeteAccount").on("submit", function(e) { //id of form
+            // click cf delete account
+            $(document).on("click", "#btnDelete", function(e) {
                 e.preventDefault();
-                var action = $(this).attr("action"); //get submit action from form
-                var method = $(this).attr("method"); // get submit method
-                var form_data = new FormData($(this)[0]); // convert form into formdata
-                var form = $(this);
+                var idDelete = $("#valueDelete").val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
                 $.ajax({
-                    url: action,
-                    dataType: 'json', // what to expect back from the server
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: form_data,
-                    type: method,
+                    type: 'DELETE',
+                    url: '/account/admin/' + idDelete,
+                    dataType: 'json',
                     success: function(response) {
-                        if (!response.erro) {
-                            location.reload(true);
-                        }
+                        $.toast({
+                            heading: 'Success',
+                            text: response.message,
+                            position: 'top-right',
+                            icon: 'success',
+                            stack: false
+                        });
+                        $("#deleteAccount").modal('hide');
+                        $("#deleteAccount").find('input').val("");
+                        getUserData();
                     },
-                    error: function(response) { // handle the error
-                        alert(response.responseJSON.message);
-                    },
-                })
+                    error: function(err) {
+                        console.log(err);
+                        $.toast({
+                            heading: 'Error',
+                            text: responseJSON.message.name,
+                            position: 'top-right',
+                            icon: 'error',
+                            stack: false
+                        });
+                        $("#deleteAccount").modal('hide');
+                        $("#deleteAccount").find('input').val("");
+                        getUserData();
+
+                    }
+                });
+            })
+        })
+        // click create acc
+        $(document).on("click", "#btnCraete", function(e) {
+            e.preventDefault();
+            var data = {
+                'username': $('#username').val(),
+                'email': $('#email').val(),
+                'password': $('#password').val(),
+                'password_confirmation': $('#cf_password').val(),
+                'token': $('#token').val()
+            };
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: '/account/admin',
+                data: data,
+                dataType: 'json',
+                success: function(response) {
+                    $.toast({
+                        heading: 'Success',
+                        text: response.message,
+                        position: 'top-right',
+                        icon: 'success',
+                        stack: false
+                    });
+                    getUserData();
+                    $("#createAccount").modal('hide');
+                    $("#createAccount").find('input').val("");
+                },
+                error: function(err) {
+                    $.toast({
+                        heading: 'Error',
+                        text: err.responseJSON.message,
+                        position: 'top-right',
+                        icon: 'error',
+                        stack: false
+                    });
+                    getUserData();
+                    $("#createAccount").modal('hide');
+                    $("#createAccount").find('input').val("");
+                }
             });
         });
     </script>
