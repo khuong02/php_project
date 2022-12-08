@@ -22,6 +22,7 @@
                 <!-- Account -->
                 <form id="formAccountSettings" method="POST" action="{{ route('edit-account-admin') }}"
                     enctype="multipart/form-data">
+                    @method('PUT')
                     @csrf
                     <input type="hidden" value="{{ $accountEdit->id }}" name="idUpdate">
                     <div class="card-body">

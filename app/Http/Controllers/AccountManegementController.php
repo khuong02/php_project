@@ -153,45 +153,6 @@ class AccountManegementController extends Controller
         }
     }
 
-    public function editAccountUserPost(Request $request)
-    {
-        try {
-            $user = new User();
-            if ($request->status == 1) {
-                Account::withTrashed()->where('user_id', '=', $request->idUpdate)->restore();
-                $userUpdate = $user->where('id', '=', $request->idUpdate);
-                $userUpdate->update(
-                    [
-                        'cost' => $request->cost
-                    ]
-                );
-            } else {
-                $userUpdate = $user->where('id', '=', $request->idUpdate);
-                $userUpdate->update(
-                    [
-                        'cost' => $request->cost
-                    ]
-                );
-                Account::where('user_id', '=', $request->idUpdate)->delete();
-            }
-            return response()->json(
-                [
-                    'erro' => false,
-                    'message' => 'update account successfully'
-                ],
-                200
-            );
-        } catch (\Throwable $th) {
-            return response()->json(
-                [
-                    'erro' => false,
-                    'message' => 'update account failure'
-                ],
-                400
-            );
-        }
-    }
-
     public function deleteAccountUser(Request $request)
     {
         try {
