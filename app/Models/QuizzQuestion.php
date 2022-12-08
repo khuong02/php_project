@@ -11,10 +11,12 @@ use Laravel\Sanctum\HasApiTokens;
 class QuizzQuestion extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    public $table = 'table_quizz_questions';
     protected $fillable = [
+        'question',
         'quizz_id',
         'difficulty_id',
-        'question',
     ];
 
     public function getList($page, $limit, $quizz_id, $difficulty_id)
