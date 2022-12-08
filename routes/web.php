@@ -10,7 +10,7 @@ use App\Http\Controllers\PasswordResetRequestController;
 use App\Http\Controllers\AccountManegementController;
 use App\Http\Controllers\topic\Topic;
 use App\Http\Controllers\question\QUestions;
-
+use App\Http\Controllers\web\AccountUserManagementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,14 +41,12 @@ Route::post('/change-password', [ChangePasswordController::class, 'passwordReset
 Route::get('/account', [AccountManegementController::class, 'updateProfileUser'])->name('account-profile')->middleware('hendletoken');
 Route::post('/account/update-profile', [UserAdminController::class, 'upProfile'])->name('update-profile-admin')->middleware('hendletoken');
 Route::get('/account/admin', [AccountManegementController::class, 'accountManegementAdmin'])->name('account-admin')->middleware('hendletoken');
-Route::get('/account/user', [AccountManegementController::class, 'accountManegementUser'])->name('account-user')->middleware('hendletoken');
+
+
 Route::post('/account-admin/delete', [AccountManegementController::class, 'deleteAccountAdmin'])->name('delete-account-admin')->middleware('hendletoken');
-Route::post('/account-user/delete', [AccountManegementController::class, 'deleteAccountUser'])->name('delete-account-user')->middleware('hendletoken');
 Route::get('/account-admin/edit/{id}', [AccountManegementController::class, 'editAccountAdmin'])->middleware('hendletoken');
-Route::get('/account-user/edit/{id}', [AccountManegementController::class, 'editAccountUser'])->middleware('hendletoken');
 
 Route::post('/account-admin/edit', [AccountManegementController::class, 'editAccountAdminPost'])->name('edit-account-admin')->middleware('hendletoken');
-Route::post('/account-user/edit', [AccountManegementController::class, 'editAccountUserPost'])->name('edit-account-user')->middleware('hendletoken');
 
 
 
@@ -73,20 +71,29 @@ Route::get('/pages/misc-under-maintenance', $controller_path . '\pages\MiscUnder
 // cards
 // Route::get('/topics', $controller_path . '\topic\Topic@index')->name('topics');
 
+Route::controller(AccountUserManagementController::class)->group(function () {
+    Route::get('/account/user', 'index')->name('account-user')->middleware('hendletoken');
+    Route::get('/account/userlist', 'getUserList');
+    Route::get('/account/user/update/{id}', 'getUiUpdateUser')->middleware('hendletoken');
+    Route::put('/account/user/{id}', 'update')->name('edit-account-user')->middleware('hendletoken');
+    Route::delete('/account/user/{id}', 'delete')->middleware('hendletoken');
+});
+
+
 Route::controller(Topic::class)->group(function () {
     Route::get('topics', 'index')->name('topics');
     Route::get('topiclist', 'getTopicList');
     Route::post('topics', 'store')->name('topic-store');
-    Route::get('topics/{id}','edit')->name('topic-edit');
+    Route::get('topics/{id}', 'edit')->name('topic-edit');
     Route::delete('topics/{id}', 'delete');
     Route::put('topics/{id}', 'update');
 });
 
-Route::controller(Questions::class)->group(function(){
-    Route::get('questions','index')->name('questions');
-    Route::get('questionlist','getQuestionList');
-    Route::post('questions','store')->name('questions-store');
-    Route::delete('questions/{id}','delete')->name('questions-delete');
+Route::controller(Questions::class)->group(function () {
+    Route::get('questions', 'index')->name('questions');
+    Route::get('questionlist', 'getQuestionList');
+    Route::post('questions', 'store')->name('questions-store');
+    Route::delete('questions/{id}', 'delete')->name('questions-delete');
 });
 
 // User Interface

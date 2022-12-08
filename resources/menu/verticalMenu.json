@@ -13,13 +13,13 @@
     {
       "url": "/account/admin",
       "icon": "menu-icon tf-icons bx bx-user-circle",
-      "name": "Account-admin",
+      "name": "Admin",
       "slug": "account-admin"
     },
     {
       "url": "/account/user",
       "icon": "menu-icon tf-icons bx bx-user-circle",
-      "name": "Account-user",
+      "name": "User",
       "slug": "account-user"
     },
     {
