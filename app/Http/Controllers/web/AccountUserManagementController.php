@@ -104,7 +104,6 @@ class AccountUserManagementController extends Controller
             return response()->json(
                 [
                     'status' => 200,
-                    'erro' => false,
                     'message' => 'update account successfully',
                     'data' => $user->getByIdv2($request->idUpdate)
                 ],
@@ -114,7 +113,6 @@ class AccountUserManagementController extends Controller
             return response()->json(
                 [
                     'status' => 400,
-                    'erro' => true,
                     'message' => 'update account failure',
                     'data' => []
                 ],

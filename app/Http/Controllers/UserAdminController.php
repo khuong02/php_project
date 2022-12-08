@@ -21,57 +21,6 @@ class UserAdminController extends Controller
         $this->uploadFile = new FileUploadController();
     }
 
-    public function createAccountAdmin(Request $request)
-    {
-        try {
-            $cookie = $request->token;
-            $private_key = env("JWT_SECRET");
-            $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
-            if ($decodoJwt->uid !== 1) {
-                return response()->json(
-                    [
-                        'erro' => true,
-                        'status' => 400,
-                        'message' => "you do not have permission to create an admin account"
-                    ],
-                    400
-                );
-            }
-            $validate =  $request->validate(
-                [
-                    'username' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255',
-                    'password' => 'min:3|required|string|confirmed'
-                ]
-            );
-            UserAdmin::create(
-                [
-                    'username' => $validate['username'],
-                    'email' => $validate['email'],
-                    'password' => Hash::make($validate['password'])
-                ]
-            );
-
-            return response()->json(
-                [
-                    'erro' => false,
-                    'status' => 201,
-                    'message' => 'create account successful',
-                ],
-                201
-            );
-        } catch (Exception $err) {
-            return response()->json(
-                [
-                    'erro' => true,
-                    'status' => 400,
-                    'message' => $err->getMessage(),
-                ],
-                400
-            );
-        }
-    }
-
     public function loginAdmin(Request $request)
     {
         $now_seconds = time();
