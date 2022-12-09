@@ -116,7 +116,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
         integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
             getUserData();
 
@@ -219,53 +219,53 @@
 
                     }
                 });
-            })
+            });
+            $(document).on("click", "#btnCraete", function(e) {
+                e.preventDefault();
+                var data = {
+                    'username': $('#username').val(),
+                    'email': $('#email').val(),
+                    'password': $('#password').val(),
+                    'password_confirmation': $('#cf_password').val(),
+                    'token': $('#token').val()
+                };
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '/account/admin',
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        $.toast({
+                            heading: 'Success',
+                            text: response.message,
+                            position: 'top-right',
+                            icon: 'success',
+                            stack: false,
+                        });
+                        $("#createAccount").modal('hide');
+                        $("#createAccount").find('input').val("");
+                        getUserData();
+                    },
+                    error: function(err) {
+                        $.toast({
+                            heading: 'Error',
+                            text: err.responseJSON.message,
+                            position: 'top-right',
+                            icon: 'error',
+                            stack: false,
+                        });
+                        $("#createAccount").modal('hide');
+                        $("#createAccount").find('input').val("");
+                        getUserData();
+                    }
+                });
+            });
         })
         // click create acc
-        $(document).on("click", "#btnCraete", function(e) {
-            e.preventDefault();
-            var data = {
-                'username': $('#username').val(),
-                'email': $('#email').val(),
-                'password': $('#password').val(),
-                'password_confirmation': $('#cf_password').val(),
-                'token': $('#token').val()
-            };
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: 'POST',
-                url: '/account/admin',
-                data: data,
-                dataType: 'json',
-                success: function(response) {
-                    $.toast({
-                        heading: 'Success',
-                        text: response.message,
-                        position: 'top-right',
-                        icon: 'success',
-                        stack: false
-                    });
-                    getUserData();
-                    $("#createAccount").modal('hide');
-                    $("#createAccount").find('input').val("");
-                },
-                error: function(err) {
-                    $.toast({
-                        heading: 'Error',
-                        text: err.responseJSON.message,
-                        position: 'top-right',
-                        icon: 'error',
-                        stack: false
-                    });
-                    getUserData();
-                    $("#createAccount").modal('hide');
-                    $("#createAccount").find('input').val("");
-                }
-            });
-        });
     </script>
 @endsection
