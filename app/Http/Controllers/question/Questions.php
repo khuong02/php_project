@@ -83,8 +83,8 @@ class Questions extends Controller
             ], 200);
         }
         return response()->json([
-            'status' => 403,
-            'message' => 'Không thể tìm thấy câu hỏi',
-        ], 403);
+            'status' => 404,
+            'message' => 'Question not found !!!',
+        ], 404);
     }
 }
