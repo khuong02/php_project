@@ -124,53 +124,38 @@
                     url: '/questionlist',
                     dataType: 'json',
                     success: function(res) {
+                        console.log(res);
                         $('tbody').html('');
                         $('#topic').html('');
                         $('#difficult').html('');
-
                         //Chèn dữ liệu từ database vào table
                         var appenddata = '';
                         $.each(res.questions, function(key, value) {
-                            appenddata += '<tr>';
-                            appenddata +=
-                                '<td><a href=""><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>' +
-                                value.question + '</strong></a></td>';
-                            appenddata +=
-                                '<td><i class="fab fa-angular fa-lg text-danger me-3"></i> ' +
-                                value.topic + '</td>';
-                            appenddata +=
-                                '<td><i class="fab fa-angular fa-lg text-danger me-3"></i> ' +
-                                value.difficult + '</td>';
+                            console.log(value);
+                            appenddata += `
+                                <tr>
+                                    <td><a href="questions/update/${value.id}"><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>${value.question}</strong></a></td>
+                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i>${value.topic}</td>
+                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i>${value.difficult}</td>
+                            `;
                             if (value.deleted_at == null) {
-                                appenddata +=
-                                    '<td><span class="badge bg-label-primary me-1">\
-                                                            Active';
-                                appenddata +=
-                                    '</span></td>\
-                                                            <td>\
-                                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="' +
-                                    value.id +
-                                    '">\
-                                                            <i class="bx bx-trash me-1"></i> Delete\
-                                                                </button>\
-                                                                </div>\
-                                                            </td>\
-                                                                </tr>';
+                                appenddata += `
+                                    <td><span class="badge bg-label-primary me-1">Active</span></td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="${value.id}">
+                                            <i class="bx bx-trash me-1"></i>Delete</button></div>
+                                    </td>
+                                </tr>
+                                `;
                             } else {
-                                appenddata +=
-                                    '<td><span class="badge bg-label-warning me-1">\
-                                                            Inactive';
-                                appenddata +=
-                                    '</span></td>\
-                                                                    <td>\
-                                                                <button type="button" class="btn btn-outline-danger" disabled data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="' +
-                                    value.id +
-                                    '">\
-                                                                <i class="bx bx-trash me-1"></i> Delete\
-                                                                </button>\
-                                                                </div>\
-                                                                </td>\
-                                                                </tr>';
+                                appenddata += `
+                                    <td><span class="badge bg-label-warning me-1">Inactive</span></td>
+                                    <td>
+                                        <button type="button" disabled class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="${value.id}">
+                                            <i class="bx bx-trash me-1"></i>Delete</button></div>
+                                    </td>
+                                </tr>
+                                `;
                             }
                         });
 

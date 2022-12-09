@@ -65,21 +65,23 @@ Route::controller(AccountAdminManagementController::class)->group(function () {
 
 // Topic Management
 Route::controller(Topic::class)->group(function () {
-    Route::get('topics', 'index')->name('topics');
+    Route::get('topics', 'index')->name('topics')->middleware('hendletoken');
     Route::get('topiclist', 'getTopicList');
-    Route::post('topics', 'store')->name('topic-store');
-    Route::get('topics/{id}', 'edit')->name('topic-edit');
-    Route::delete('topics/{id}', 'delete');
-    Route::put('topics/{id}', 'update');
+    Route::post('topics', 'store')->name('topic-store')->middleware('hendletoken');
+    Route::get('topics/{id}', 'edit')->name('topic-edit')->middleware('hendletoken');
+    Route::put('topics/{id}', 'update')->middleware('hendletoken');
+    Route::delete('topics/{id}', 'delete')->middleware('hendletoken');
 });
 
 
 // Questions Management
 Route::controller(Questions::class)->group(function () {
-    Route::get('questions', 'index')->name('questions');
+    Route::get('questions', 'index')->name('questions')->middleware('hendletoken');
     Route::get('questionlist', 'getQuestionList');
-    Route::post('questions', 'store')->name('questions-store');
-    Route::delete('questions/{id}', 'delete')->name('questions-delete');
+    Route::get('questions/update/{id}', 'getUiUpdateQuestion')->name('questions-edit')->middleware('hendletoken');
+    Route::put('questions/{id}', 'update')->name('update-question')->middleware('hendletoken');
+    Route::post('questions', 'store')->name('questions-store')->middleware('hendletoken');
+    Route::delete('questions/{id}', 'delete')->name('questions-delete')->middleware('hendletoken');
 });
 
 
