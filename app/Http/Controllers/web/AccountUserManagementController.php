@@ -142,7 +142,7 @@ class AccountUserManagementController extends Controller
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                    'erro' => true,
+                    'status' => 500,
                     'message' => 'server erro'
                 ],
                 500

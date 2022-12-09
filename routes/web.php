@@ -63,6 +63,25 @@ Route::controller(AccountAdminManagementController::class)->group(function () {
     Route::delete('/account/admin/{id}', 'delete')->middleware('hendletoken');
 });
 
+// Topic Management
+Route::controller(Topic::class)->group(function () {
+    Route::get('topics', 'index')->name('topics');
+    Route::get('topiclist', 'getTopicList');
+    Route::post('topics', 'store')->name('topic-store');
+    Route::get('topics/{id}', 'edit')->name('topic-edit');
+    Route::delete('topics/{id}', 'delete');
+    Route::put('topics/{id}', 'update');
+});
+
+
+// Questions Management
+Route::controller(Questions::class)->group(function () {
+    Route::get('questions', 'index')->name('questions');
+    Route::get('questionlist', 'getQuestionList');
+    Route::post('questions', 'store')->name('questions-store');
+    Route::delete('questions/{id}', 'delete')->name('questions-delete');
+});
+
 
 
 Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name('auth-register-basic');
@@ -89,21 +108,9 @@ Route::get('/pages/misc-under-maintenance', $controller_path . '\pages\MiscUnder
 
 
 
-Route::controller(Topic::class)->group(function () {
-    Route::get('topics', 'index')->name('topics');
-    Route::get('topiclist', 'getTopicList');
-    Route::post('topics', 'store')->name('topic-store');
-    Route::get('topics/{id}', 'edit')->name('topic-edit');
-    Route::delete('topics/{id}', 'delete');
-    Route::put('topics/{id}', 'update');
-});
 
-Route::controller(Questions::class)->group(function () {
-    Route::get('questions', 'index')->name('questions');
-    Route::get('questionlist', 'getQuestionList');
-    Route::post('questions', 'store')->name('questions-store');
-    Route::delete('questions/{id}', 'delete')->name('questions-delete');
-});
+
+
 
 // User Interface
 Route::get('/ui/accordion', $controller_path . '\user_interface\Accordion@index')->name('ui-accordion');
