@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\LeaderBoard;
 use App\Models\UserSetting;
 use Illuminate\Http\Request;
 
@@ -11,10 +12,18 @@ class UserApiController extends Controller
     public function getProfile(Request $request)
     {
         $user = new User();
+        $leaderboard = new LeaderBoard();
+
         $id = $request->get('user_id');
+
+        $myLB = $leaderboard->GetByUserID($id);
+
         return response()->json([
             'status' => 200,
-            'data' => $user->getById($id)[0]
+            'data' => [
+                'user'=> $user->getById($id)[0],
+                'score'=>$myLB[0]->score,
+            ],
         ], 200);
     }
 
