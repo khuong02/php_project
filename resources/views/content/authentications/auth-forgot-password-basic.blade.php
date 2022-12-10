@@ -84,7 +84,6 @@
                         });
                     },
                     error: function(response) {
-                        console.log(response);
                         $.toast({
                             heading: 'Error',
                             text: response.responseJSON.message,
