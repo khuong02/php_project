@@ -123,7 +123,7 @@ class AccountAdminManagementController extends Controller
             return response()->json(
                 [
                     'status' => 201,
-                    'message' => 'Topic create successfully!',
+                    'message' => 'Account create successfully!',
                 ],
                 201
             );

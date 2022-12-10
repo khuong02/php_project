@@ -53,7 +53,6 @@ class Questions extends Controller
             $question->question = $request->input('question');
             $question->quizz_id = $request->input('quizz_id');
             $question->difficulty_id = $request->input('difficulty_id');
-
             $question->save();
 
             return response()->json([
@@ -117,12 +116,13 @@ class Questions extends Controller
                 'correctAnswer' => 'required|string|max:255'
             ]);
             $answer = new Answers();
-            $validatorAnswer1 = $answer->checkAnwerCurrentlyExistingByQuestionID($request->idUpdate, $request->Answer1);
-            $validatorAnswer2 = $answer->checkAnwerCurrentlyExistingByQuestionID($request->idUpdate, $request->Answer2);
-            $validatorAnswer3 = $answer->checkAnwerCurrentlyExistingByQuestionID($request->idUpdate, $request->Answer3);
-            $validatorCorrectAnswer = $answer->checkAnwerCurrentlyExistingByQuestionID($request->idUpdate, $request->correctAnswer);
-            // check xem cau hoi do da co 1 trong nhung dap an moi request
-            if ($validatorAnswer1 || $validatorAnswer2 || $validatorAnswer3 || $validatorCorrectAnswer) {
+            $checkCoincideAnswer1vsAnswer2 = $request->Answer1 == $request->Answer2;
+            $checkCoincideAnswer1vsAnswer3 = $request->Answer1 == $request->Answer2;
+            $checkCoincideAnswer1vsCorrectAnswer = $request->Answer1 == $request->correctAnswer;
+            $checkCoincideAnswer2vsAnswer3 = $request->Answer2 == $request->Answer3;
+            $checkCoincideAnswer2vsCorrectAnswer = $request->Answer2 == $request->correctAnswer;
+            $checkCoincideAnswer3vsCorrectAnswer = $request->Answer3 == $request->correctAnswer;
+            if ($checkCoincideAnswer1vsAnswer2 || $checkCoincideAnswer1vsAnswer3 || $checkCoincideAnswer1vsCorrectAnswer || $checkCoincideAnswer2vsAnswer3 || $checkCoincideAnswer2vsCorrectAnswer || $checkCoincideAnswer3vsCorrectAnswer) {
                 return response()->json(
                     [
                         'status' => 400,
@@ -131,7 +131,60 @@ class Questions extends Controller
                     400
                 );
             }
-            // dd($request);
+            if ($request->questionNew == 'true') {
+                Answers::create(
+                    [
+                        'question_id' => $request->idUpdate,
+                        'answer' => $request->Answer1,
+                        'correct_answer' => 0
+                    ]
+                );
+                Answers::create(
+                    [
+                        'question_id' => $request->idUpdate,
+                        'answer' => $request->Answer2,
+                        'correct_answer' => 0
+                    ]
+                );
+                Answers::create(
+                    [
+                        'question_id' => $request->idUpdate,
+                        'answer' => $request->Answer3,
+                        'correct_answer' => 0
+                    ]
+                );
+                Answers::create(
+                    [
+                        'question_id' => $request->idUpdate,
+                        'answer' => $request->correctAnswer,
+                        'correct_answer' => 1
+                    ]
+                );
+            } else {
+                Answers::where('id', '=', $request->idCorrectAnswer)->update(
+                    [
+                        'answer' => $request->correctAnswer
+                    ]
+                );
+                Answers::where('id', '=', $request->idAnswer1)->update(
+                    [
+                        'answer' => $request->Answer1
+                    ]
+                );
+                Answers::where('id', '=', $request->idAnswer2)->update(
+                    [
+                        'answer' => $request->Answer2
+                    ]
+                );
+                Answers::where('id', '=', $request->idAnswer3)->update(
+                    [
+                        'answer' => $request->Answer3
+                    ]
+                );
+            }
+
+            $listDiff = Difficulty::all();
+
             $question = new QuizzQuestion();
             $questionData = $question->getquestionById($request->idUpdate);
             if ($request->status == 1) {
@@ -158,12 +211,13 @@ class Questions extends Controller
                 [
                     'status' => 200,
                     'message' => 'update question succesfully',
-                    'questionData' => $questionData
+                    'questionData' => $questionData,
+                    'listAnswer' => $answer->getAnswersByQuestionID($request->idUpdate),
+                    'diff' => $listDiff
                 ],
                 200
             );
         } catch (\Throwable $th) {
-            dd($th);
             return response()->json(
                 [
                     'status' => 500,

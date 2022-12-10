@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
-use app\Http\Controllers\JwtController;
+use App\Http\Controllers\JwtController;
 
 class ChangePasswordController extends Controller
 {

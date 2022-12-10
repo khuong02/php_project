@@ -36,29 +36,6 @@
       "icon": "menu-icon tf-icons bx bx-collection",
       "slug": "questions",
       "url": "questions"
-    },
-    {
-      "name": "Question Answers",
-      "icon": "menu-icon tf-icons bx bx-collection",
-      "slug": "answers",
-      "url": "answers"
-    },
-    {
-      "menuHeader": "Misc"
-    },
-    {
-      "url": "https://themeselection.com/support/",
-      "icon": "menu-icon tf-icons bx bx-support",
-      "name": "Support",
-      "slug": "support",
-      "target": "_blank"
-    },
-    {
-      "url": "https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/laravel-introduction.html",
-      "icon": "menu-icon tf-icons bx bx-file",
-      "name": "Documentation",
-      "slug": "documentation",
-      "target": "_blank"
     }
   ]
 }

@@ -45,7 +45,6 @@
                     </div>
                     <hr class="my-0">
                     <div class="card-body">
-                        {{-- <form id="formAccountSettings" method="POST" action="{{ route('update-profile-admin') }}"> --}}
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label for="firstName" class="form-label">User Name</label>
@@ -60,34 +59,33 @@
                             <div class="mb-3 col-md-6">
                                 <label for="address" class="form-label">Created At</label>
                                 <input type="datetime" class="form-control" id="address" name="created_at"
-                                    placeholder="Address" value="{{ $admiProfile->created_at }}" readonly />
+                                    value="{{ $admiProfile->created_at }}" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address" class="form-label">Update Lần Cuối</label>
                                 <input type="datetime" class="form-control" id="address" name="updated_at"
-                                    placeholder="Address" value="{{ $admiProfile->updated_at }}" readonly />
+                                    value="{{ $admiProfile->updated_at }}" readonly />
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="firstName" class="form-label">Current password</label>
-                                <input class="form-control" type="text" id="current_password" name="current_password"
+                                <label for="current_password" class="form-label">Current password</label>
+                                <input class="form-control" type="password" id="current_password" name="current_password"
                                     value="" autofocus />
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="firstName" class="form-label">New password</label>
-                                <input class="form-control" type="text" id="new_pasword" name="password" value=""
+                                <label for="password" class="form-label">New password</label>
+                                <input class="form-control" type="password" id="new_pasword" name="password" value=""
                                     autofocus />
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="firstName" class="form-label">Confirm new password</label>
-                                <input class="form-control" type="text" id="password_confirmation" name="cf_password"
+                                <label for="cf_password" class="form-label">Confirm new password</label>
+                                <input class="form-control" type="password" id="password_confirmation" name="cf_password"
                                     value="" autofocus />
                             </div>
                             <div class="mt-2">
                                 <button type="submit" class="btn btn-primary me-2">Save changes</button>
                                 <button type="reset" class="btn btn-outline-secondary">Cancel</button>
                             </div>
-                            {{-- </form> --}}
                         </div>
                 </form>
                 <!-- /Account -->
@@ -98,31 +96,31 @@
 
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script>
-        // $(function() {
-        //     $("#formAccountSettings").on("submit", function(e) { //id of form
-        //         e.preventDefault();
-        //         var action = $(this).attr("action"); //get submit action from form
-        //         var method = $(this).attr("method"); // get submit method
-        //         var form_data = new FormData($(this)[0]); // convert form into formdata
-        //         var form = $(this);
-        //         $.ajax({
-        //             url: action,
-        //             dataType: 'json', // what to expect back from the server
-        //             cache: false,
-        //             contentType: false,
-        //             processData: false,
-        //             data: form_data,
-        //             type: method,
-        //             success: function(response) {
-        //                 if (!response.erro) {
-        //                     location.reload(true);
-        //                 }
-        //             },
-        //             error: function(response) { // handle the error
-        //                 alert(response.responseJSON.message);
-        //             },
-        //         })
-        //     });
-        // });
+        $(function() {
+            $("#formAccountSettings").on("submit", function(e) { //id of form
+                e.preventDefault();
+                var action = $(this).attr("action"); //get submit action from form
+                var method = $(this).attr("method"); // get submit method
+                var form_data = new FormData($(this)[0]); // convert form into formdata
+                var form = $(this);
+                $.ajax({
+                    url: action,
+                    dataType: 'json', // what to expect back from the server
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    type: method,
+                    success: function(response) {
+                        if (!response.erro) {
+                            location.reload(true);
+                        }
+                    },
+                    error: function(response) { // handle the error
+                        alert(response.responseJSON.message);
+                    },
+                })
+            });
+        });
     </script>
 @endsection

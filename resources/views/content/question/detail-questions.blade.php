@@ -30,17 +30,25 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">Topic</label>
-                                <select class="form-control" name="topic">
+                                <select class="form-control" name="topic" id="topic">
                                     @foreach ($listTopic as $topic)
-                                        <option value="{{ $topic['id'] }}" selected>{{ $topic['name'] }}</option>
+                                        @if ($topic['id'] == $questionData->quizz_id)
+                                            <option value="{{ $topic['id'] }}" selected>{{ $topic['name'] }}</option>
+                                        @else
+                                            <option value="{{ $topic['id'] }}">{{ $topic['name'] }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">Diff</label>
-                                <select class="form-control" name="diff">
+                                <select class="form-control" name="diff" id="diff">
                                     @foreach ($listDiff as $diff)
-                                        <option value="{{ $diff['id'] }}" selected>{{ $diff['name'] }}</option>
+                                        @if ($diff['id'] == $questionData->difficulty_id)
+                                            <option value="{{ $diff['id'] }}" selected>{{ $diff['name'] }}</option>
+                                        @else
+                                            <option value="{{ $diff['id'] }}">{{ $diff['name'] }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -49,7 +57,9 @@
                     <hr class="my-0">
                     <div class="card-body">
                         <div class="row">
+                            {{-- {{ dd($listAnswer) }} --}}
                             @if (count($listAnswer) == 0)
+                                <input hidden name="questionNew" value="true">
                                 <div class="mb-3 col-md-6">
                                     <label for="Answer1" class="form-label">Answer</label>
                                     <input class="form-control" type="text" id="Answer1" name="Answer1" value=""
@@ -71,18 +81,22 @@
                                         value="" autofocus />
                                 </div>
                             @else
+                                <input hidden name="questionNew" value="false">
                                 <?php $count = 0; ?>
                                 @foreach ($listAnswer as $answer)
                                     @if ($answer->correct_answer == 0)
                                         <?php $count++; ?>
                                         <div class="mb-3 col-md-6">
                                             <label for="Answer{{ $count }}" class="form-label">Answer</label>
+                                            <input hidden name="idAnswer{{ $count }}" value="{{ $answer->id }}">
                                             <input class="form-control" type="text" id="Answer{{ $count }}"
-                                                name="Answer{{ $count }}" value="{{ $answer->answer }}" autofocus />
+                                                name="Answer{{ $count }}" value="{{ $answer->answer }}"
+                                                autofocus />
                                         </div>
                                     @else
                                         <div class="mb-3 col-md-6">
                                             <label for="correctAnswer" class="form-label">Correct Answer</label>
+                                            <input hidden name="idCorrectAnswer" value="{{ $answer->id }}">
                                             <input class="form-control" type="text" id="correctAnswer"
                                                 name="correctAnswer" value="{{ $answer->answer }}" autofocus />
                                         </div>
@@ -123,6 +137,7 @@
         $(function() {
             $("#formQuestion").on("submit", function(e) { //id of form
                 e.preventDefault();
+
                 var checkValueAnswer1vsAnswer2 = $('#Answer1').val() == $('#Answer2').val();
                 var checkValueAnswer1vsAnswer3 = $('#Answer1').val() == $('#Answer3').val();
                 var checkValueAnswer1vscorrectAnswer = $('#Answer1').val() == $('#correctAnswer').val();
@@ -130,9 +145,16 @@
                 var checkValueAnswer2vscorrectAnswer = $('#Answer2').val() == $('#correctAnswer').val();
                 var checkValueAnswer3vscorrectAnswer = $('#Answer3').val() == $('#correctAnswer').val();
 
+                var checkEmptyAnswer1 = $('#Answer1').val() == '';
+                var checkEmptyAnswer2 = $('#Answer2').val() == '';
+                var checkEmptyAnswer3 = $('#Answer3').val() == '';
+                var checkEmptyCorrectAnswer = $('#correctAnswer').val() == '';
+
                 if (checkValueAnswer1vsAnswer2 || checkValueAnswer1vsAnswer3 ||
                     checkValueAnswer1vscorrectAnswer || checkValueAnswer2vsAnswer3 ||
-                    checkValueAnswer2vscorrectAnswer || checkValueAnswer3vscorrectAnswer) {
+                    checkValueAnswer2vscorrectAnswer || checkValueAnswer3vscorrectAnswer ||
+                    checkEmptyAnswer1 || checkEmptyAnswer2 || checkEmptyAnswer3 || checkEmptyCorrectAnswer
+                ) {
                     $.toast({
                         heading: 'Error',
                         text: 'Duplicate or empty answer !!!',
@@ -154,7 +176,16 @@
                         data: form_data,
                         type: method,
                         success: function(response) {
-
+                            console.log(response);
+                            $('#diff').val(response.questionData.difficulty_id).change();
+                            $('#topic').val(response.questionData.quizz_id).change();
+                            $.toast({
+                                heading: 'Success',
+                                text: response.message,
+                                position: 'top-right',
+                                icon: 'success',
+                                stack: false
+                            });
                         },
                         error: function(response) {
                             $.toast({

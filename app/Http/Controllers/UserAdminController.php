@@ -122,11 +122,13 @@ class UserAdminController extends Controller
                 [
                     'username' => 'string|max:255',
                     'email' => 'string|email|max:255',
-                    'current_password' => 'string|max:255',
-                    'password' => 'string|max:255',
+                    'current_password' => 'max:255',
+                    'password' => 'max:255',
                     'cf_password' => 'same:password'
                 ]
             );
+
+            // dd($request);
             $cookie = $this->getCookie('token');
             $private_key = env('JWT_SECRET');
             $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
@@ -134,7 +136,7 @@ class UserAdminController extends Controller
             $id = $decodoJwt->uid;
             $userAdmin = UserAdmin::where('id', $id)->first();
             if ($request->hasFile('avatar')) {
-                if ($request->current_password !== '') {
+                if ($request->current_password !== null) {
                     if ($this->validPassword($id, $request->current_password)) {
                         $userAdmin->update([
                             'username' => $request->username,
@@ -156,7 +158,7 @@ class UserAdminController extends Controller
                     ]);
                 }
             } else {
-                if ($request->current_password !== '') {
+                if ($request->current_password !== null) {
                     if ($this->validPassword($id, $request->current_password)) {
                         $userAdmin->update([
                             'username' => $request->username,
@@ -182,6 +184,7 @@ class UserAdminController extends Controller
                 'message' => "update successfully!"
             ], 200);
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json([
                 "status" => 500,
                 "message" => "update failed!"

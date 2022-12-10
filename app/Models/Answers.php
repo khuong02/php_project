@@ -22,7 +22,7 @@ class Answers extends Model
 
     public function getAnswersByQuestionID($question_id)
     {
-        return DB::table('table_quizz_question_answers')->where('question_id', $question_id)->get();
+        return DB::table('table_quizz_question_answers')->where('question_id', '=', $question_id)->get();
     }
 
     public function checkAnwerCurrentlyExistingByQuestionID($question_id, $answer_check)

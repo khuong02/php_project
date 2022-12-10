@@ -131,7 +131,6 @@
                         //Chèn dữ liệu từ database vào table
                         var appenddata = '';
                         $.each(res.questions, function(key, value) {
-                            console.log(value);
                             appenddata += `
                                 <tr>
                                     <td><a href="questions/update/${value.id}"><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>${value.question}</strong></a></td>
@@ -215,7 +214,7 @@
                     error: function(err) {
                         $.toast({
                             heading: 'Error',
-                            text: err.responseJSON.message.name,
+                            text: err.responseJSON.message.question,
                             position: 'top-right',
                             icon: 'error',
                             stack: false
