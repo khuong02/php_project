@@ -22,7 +22,7 @@ class Questions extends Controller
   }
 
   public function getQuestionList(){
-    $listQuestion = DB::select("SELECT table_quizz_questions.id,table_quizzes.name as 'topic',table_difficulties.name as 'difficult',question, table_quizz_questions.deleted_at FROM php_project.table_quizz_questions,php_project.table_quizzes,php_project.table_difficulties WHERE quizz_id = table_quizzes.id and difficulty_id = php_project.table_difficulties.id");
+    $listQuestion = DB::select("SELECT table_quizz_questions.id,table_quizzes.name as 'topic',table_difficulties.name as 'difficult',question, table_quizz_questions.deleted_at FROM php_project.table_quizz_questions,php_project.table_quizzes,php_project.table_difficulties WHERE table_quizz_questions.quizz_id = table_quizzes.id and table_quizz_questions.difficulty_id = php_project.table_difficulties.id");
     $listTopic = Quizz::all();
     $listDiff = Difficulty::all();
     return response()->json([

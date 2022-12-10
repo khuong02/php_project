@@ -29,6 +29,8 @@ Route::post('/users', [UserApiController::class, 'updateProfile'])->middleware('
 Route::post('/users/settings', [UserApiController::class, 'updateSetting'])->middleware('myauth');
 
 Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer'])->middleware('myauth');
+Route::get('/questionsrank', [QuestionController::class, 'getQuestionAndAnswerRankMode'])->middleware('myauth');
+
 
 Route::get('/quizz', [TopicController::class, 'getTopics'])->middleware('myauth');
 

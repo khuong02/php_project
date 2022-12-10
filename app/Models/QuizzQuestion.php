@@ -31,4 +31,15 @@ class QuizzQuestion extends Model
             [$quizz_id, $difficulty_id, $limit, $page - 1]
         );
     }
+
+    public function getListRankMode($page){
+        return DB::select(
+            'select *
+            from table_quizz_questions
+            where deleted_at is null
+            order by RAND()
+            offset ?',
+            [$page - 1]
+        );
+    }
 }
