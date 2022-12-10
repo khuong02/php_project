@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
+use App\Mail\SendMail;
+use App\Models\UserAdmin;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use App\Mail\SendMail;
-use App\Models\User;
-use App\Models\UserAdmin;
-use Carbon\Carbon;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\JwtController;
+use Symfony\Component\HttpFoundation\Response;
 
 class PasswordResetRequestController extends Controller
 {
@@ -56,22 +56,11 @@ class PasswordResetRequestController extends Controller
                 'message' => 'Email does not exist.',
             ], Response::HTTP_NOT_FOUND);
         } else {
-
-            if ($this->checkAccountResset($request)->count() > 0) {
-                return response()->json(
-                    [
-                        'erro' => false,
-                        'message' => 'The account has requested a password reset. Please check your email again'
-                    ],
-                    Response::HTTP_ACCEPTED
-                );
-            } else {
-                $this->sendMailAdmin($request);
-                return response()->json([
-                    'erro' => false,
-                    'message' => 'Check your inbox, we have sent a link to reset email.',
-                ], Response::HTTP_OK);
-            }
+            $this->sendMailAdmin($request);
+            return response()->json([
+                'erro' => false,
+                'message' => 'Check your inbox, we have sent a link to reset email.',
+            ], Response::HTTP_OK);
         }
     }
 

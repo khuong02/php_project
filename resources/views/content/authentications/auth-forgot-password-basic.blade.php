@@ -1,10 +1,13 @@
 @extends('layouts/blankLayout')
 
-@section('title', 'Forgot Password Basic - Pages')
+@section('title', 'Forgot Password')
 
 @section('page-style')
-    <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+        integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Page -->
 @endsection
 
 @section('content')
@@ -32,6 +35,7 @@
                                 <label for="email" class="form-label">Email</label>
                                 <input type="text" class="form-control" id="email" name="email"
                                     placeholder="Enter your email" autofocus>
+                                <input hidden name="roles" value="1">
                             </div>
                             <button class="btn btn-primary d-grid w-100">Send Reset Link</button>
                         </form>
@@ -43,35 +47,55 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <script src="{{ asset('assets/js/jquery.js') }}"></script>
-                <script>
-                    $(function() {
-                        $("#formAuthentication").on("submit", function(e) { //id of form
-                            e.preventDefault();
-                            var action = $(this).attr("action"); //get submit action from form
-                            var method = $(this).attr("method"); // get submit method
-                            var form_data = new FormData($(this)[0]); // convert form into formdata
-                            var form = $(this);
-                            $.ajax({
-                                url: action,
-                                dataType: 'json', // what to expect back from the server
-                                cache: false,
-                                contentType: false,
-                                processData: false,
-                                data: form_data,
-                                type: method,
-                                success: function(response) {
-                                    if (!response.erro) {
-                                        alert(response.message);
-                                    }
-                                },
-                                error: function(response) { // handle the error
-                                    alert(response.responseJSON.message);
-                                },
-                            })
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/jquery.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
+        integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(function() {
+            $("#formAuthentication").on("submit", function(e) { //id of form
+                e.preventDefault();
+                var action = $(this).attr("action"); //get submit action from form
+                var method = $(this).attr("method"); // get submit method
+                var form_data = new FormData($(this)[0]); // convert form into formdata
+                var form = $(this);
+                $.ajax({
+                    url: action,
+                    dataType: 'json', // what to expect back from the server
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    type: method,
+                    success: function(response) {
+                        $.toast({
+                            heading: 'Success',
+                            text: response.message,
+                            position: 'top-right',
+                            icon: 'success',
+                            stack: false
                         });
-                    });
-                </script>
+                    },
+                    error: function(response) {
+                        console.log(response);
+                        $.toast({
+                            heading: 'Error',
+                            text: response.responseJSON.message,
+                            position: 'top-right',
+                            icon: 'error',
+                            stack: false
+                        });
+                    },
+                })
+            });
+        });
+    </script>
 
-            @endsection
+@endsection

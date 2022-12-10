@@ -97,7 +97,8 @@ class AccountAdminManagementController extends Controller
             $cookie = $request->token;
             $private_key = env("JWT_SECRET");
             $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
-            if ($decodoJwt->uid !== 1) {
+            $userAdmin = UserAdmin::where('id', $decodoJwt->uid)->first();
+            if ($userAdmin->email !== env('EMAIL_ADMIN')) {
                 return response()->json(
                     [
                         'status' => 405,
