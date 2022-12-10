@@ -60,4 +60,45 @@ class QuestionController extends Controller
             ], 500);
         }
     }
+    public function getQuestionAndAnswerRankMode(Request $request)
+    {
+        try {
+            $page = $request['page'] ?: 1;
+            $question = new QuizzQuestion();
+            $answer = new QuizzQuestionAnswer();
+            $questions = $question->getListRankMode($page);
+            $result = [];
+
+            for ($i = 0; $i < count($questions); $i++) {
+                $data = [];
+                $answerData = $answer->getAnswerByQuestionId($questions[$i]->id);
+
+                $data['id'] = $questions[$i]->id;
+                $data['incorrectAnswers'] = [];
+                $data['question'] = $questions[$i]->question;
+
+                for ($j = 0; $j < count($answerData); $j++) {
+                    if ($answerData[$j]->correct_answer == 1) {
+                        $data['correctAnswer'] = $answerData[$j]->answer;
+                    } else {
+                        array_push($data['incorrectAnswers'], $answerData[$j]->answer);
+                    }
+                }
+
+                array_push($result, $data);
+            }
+            return response()->json([
+                'status' => 200,
+                'data' => [
+                    "total"=>count($questions),
+                    "questions"=>$result,
+                ],
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'msg' => 'Get question failed'
+            ], 500);
+        }
+    }
 }
