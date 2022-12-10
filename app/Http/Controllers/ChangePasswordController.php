@@ -7,8 +7,8 @@ use App\Models\UserAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use App\Http\Controllers\JwtController;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 
 class ChangePasswordController extends Controller
 {
@@ -77,13 +77,12 @@ class ChangePasswordController extends Controller
     private function resetPasswordAdmin($email, $password, $token)
     {
         try {
-            $acc = UserAdmin::where('email', $email)->first();
+            $acc = UserAdmin::where('email', '=', $email)->first();
 
             $acc->update([
                 'password' => Hash::make($password),
             ]);
             $acc->save();
-
             $this->verifyToken($email, $token)->delete();
         } catch (\Throwable $th) {
             throw $th;

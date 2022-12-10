@@ -240,6 +240,7 @@
                     data: data,
                     dataType: 'json',
                     success: function(response) {
+                        console.log(response);
                         $.toast({
                             heading: 'Success',
                             text: response.message,
@@ -252,6 +253,7 @@
                         getUserData();
                     },
                     error: function(err) {
+                        console.log(err);
                         $.toast({
                             heading: 'Error',
                             text: err.responseJSON.message,
