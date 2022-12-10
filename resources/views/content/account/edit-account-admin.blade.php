@@ -1,9 +1,11 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Account settings - Account')
+@section('title', 'Edit Account - Admin')
 
-@section('page-script')
-    <script src="{{ asset('assets/js/pages-account-settings-account.js') }}"></script>
+@section('vendor-script')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+        integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endsection
 
 @section('content')
@@ -20,8 +22,9 @@
             <div class="card mb-4">
                 <h5 class="card-header">Profile Details</h5>
                 <!-- Account -->
-                <form id="formAccountSettings" method="POST" action="{{ route('edit-account-admin') }}"
-                    enctype="multipart/form-data">
+                <form id="formAccountSettings" method="POST"
+                    action="{{ route('edit-account-admin', ['id' => $accountEdit->id]) }}" enctype="multipart/form-data">
+                    @method('PUT')
                     @csrf
                     <input type="hidden" value="{{ $accountEdit->id }}" name="idUpdate">
                     <div class="card-body">
@@ -45,12 +48,12 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address" class="form-label">Created At</label>
-                                <input type="datetime" class="form-control" id="address" name="created_at"
+                                <input type="datetime" class="form-control" id="create_at" name="created_at"
                                     placeholder="Address" value="{{ $accountEdit->created_at }}" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address" class="form-label">Update Lần Cuối</label>
-                                <input type="datetime" class="form-control" id="address" name="updated_at"
+                                <input type="datetime" class="form-control" id="update_at" name="updated_at"
                                     placeholder="Address" value="{{ $accountEdit->updated_at }}" readonly />
                             </div>
                             <div class="mb-3 col-md-6">
@@ -75,9 +78,14 @@
             </div>
         </div>
     </div>
+@endsection
 
 
+@section('page-script')
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
+        integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(function() {
             $("#formAccountSettings").on("submit", function(e) { //id of form
@@ -95,12 +103,25 @@
                     data: form_data,
                     type: method,
                     success: function(response) {
-                        if (!response.erro) {
-                            location.reload(true);
-                        }
+                        $('#firstName').val(response.data.username);
+                        $('#email').val(response.data.email);
+                        $('#update_at').val(response.data.updated_at);
+                        $.toast({
+                            heading: 'Success',
+                            text: response.message,
+                            position: 'top-right',
+                            icon: 'success',
+                            stack: false
+                        });
                     },
                     error: function(response) { // handle the error
-                        alert(response.responseJSON.message);
+                        $.toast({
+                            heading: 'Error',
+                            text: err.responseJSON.message.name,
+                            position: 'top-right',
+                            icon: 'error',
+                            stack: false
+                        });
                     },
                 })
             });

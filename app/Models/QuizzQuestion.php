@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class QuizzQuestion extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     public $table = 'table_quizz_questions';
     protected $fillable = [
@@ -18,6 +19,11 @@ class QuizzQuestion extends Model
         'quizz_id',
         'difficulty_id',
     ];
+
+    public function getquestionById($id)
+    {
+        return DB::table('table_quizz_questions')->where('id', '=', $id)->get()->first();
+    }
 
     public function getList($page, $limit, $quizz_id, $difficulty_id)
     {

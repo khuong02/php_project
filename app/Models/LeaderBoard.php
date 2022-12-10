@@ -10,7 +10,7 @@ class LeaderBoard extends Model
 {
     use HasFactory;
     private $quantity, $time, $userID, $score;
-
+    public $table = 'leader_boards';
     protected $fillable = [
         'user_id',
         'quantity',

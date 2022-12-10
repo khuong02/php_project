@@ -21,57 +21,6 @@ class UserAdminController extends Controller
         $this->uploadFile = new FileUploadController();
     }
 
-    public function createAccountAdmin(Request $request)
-    {
-        try {
-            $cookie = $request->token;
-            $private_key = env("JWT_SECRET");
-            $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
-            if ($decodoJwt->uid !== 1) {
-                return response()->json(
-                    [
-                        'erro' => true,
-                        'status' => 400,
-                        'message' => "you do not have permission to create an admin account"
-                    ],
-                    400
-                );
-            }
-            $validate =  $request->validate(
-                [
-                    'username' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255',
-                    'password' => 'min:3|required|string|confirmed'
-                ]
-            );
-            UserAdmin::create(
-                [
-                    'username' => $validate['username'],
-                    'email' => $validate['email'],
-                    'password' => Hash::make($validate['password'])
-                ]
-            );
-
-            return response()->json(
-                [
-                    'erro' => false,
-                    'status' => 201,
-                    'message' => 'create account successful',
-                ],
-                201
-            );
-        } catch (Exception $err) {
-            return response()->json(
-                [
-                    'erro' => true,
-                    'status' => 400,
-                    'message' => $err->getMessage(),
-                ],
-                400
-            );
-        }
-    }
-
     public function loginAdmin(Request $request)
     {
         $now_seconds = time();
@@ -173,11 +122,13 @@ class UserAdminController extends Controller
                 [
                     'username' => 'string|max:255',
                     'email' => 'string|email|max:255',
-                    'current_password' => 'string|max:255',
-                    'password' => 'string|max:255',
+                    'current_password' => 'max:255',
+                    'password' => 'max:255',
                     'cf_password' => 'same:password'
                 ]
             );
+
+            // dd($request);
             $cookie = $this->getCookie('token');
             $private_key = env('JWT_SECRET');
             $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
@@ -185,7 +136,7 @@ class UserAdminController extends Controller
             $id = $decodoJwt->uid;
             $userAdmin = UserAdmin::where('id', $id)->first();
             if ($request->hasFile('avatar')) {
-                if ($request->current_password !== '') {
+                if ($request->current_password !== null) {
                     if ($this->validPassword($id, $request->current_password)) {
                         $userAdmin->update([
                             'username' => $request->username,
@@ -207,7 +158,7 @@ class UserAdminController extends Controller
                     ]);
                 }
             } else {
-                if ($request->current_password !== '') {
+                if ($request->current_password !== null) {
                     if ($this->validPassword($id, $request->current_password)) {
                         $userAdmin->update([
                             'username' => $request->username,
@@ -233,6 +184,7 @@ class UserAdminController extends Controller
                 'message' => "update successfully!"
             ], 200);
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json([
                 "status" => 500,
                 "message" => "update failed!"
