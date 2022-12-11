@@ -10,8 +10,8 @@ class TopicController extends Controller
     public function getTopics(Request $request)
     {
         try {
-            $page = $request['page'] || 1;
-            $limit = $request['limit'] || 10;
+            $page = $request['page'] ?: 1;
+            $limit = $request['limit'] ?: 10;
             $quizz = new Quizz();
 
 
@@ -22,7 +22,7 @@ class TopicController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 500,
-                'msg' => 'Get question failed'
+                'msg' => 'Get topic failed'
             ], 500);
         }
     }

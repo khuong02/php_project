@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/users', [UserApiController::class, 'getProfile'])->middleware('myauth');
 Route::post('/users', [UserApiController::class, 'updateProfile'])->middleware('myauth');
 Route::post('/users/settings', [UserApiController::class, 'updateSetting'])->middleware('myauth');
+Route::post('/users/buycredit',[UserApiController::class,'buyCredit'])->middleware('myauth');
 
 Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer'])->middleware('myauth');
 Route::get('/questionsrank', [QuestionController::class, 'getQuestionAndAnswerRankMode'])->middleware('myauth');
@@ -36,6 +37,8 @@ Route::get('/quizz', [TopicController::class, 'getTopics'])->middleware('myauth'
 
 Route::post('/leaderboard', [LeaderBoardController::class, 'SetLeaderBoard'])->middleware('myauth');
 Route::get('/leaderboard', [LeaderBoardController::class, 'getList'])->middleware('myauth');
+
+
 
 
 Route::controller(AuthController::class)->group(function () {

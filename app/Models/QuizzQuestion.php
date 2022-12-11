@@ -43,9 +43,7 @@ class QuizzQuestion extends Model
             'select *
             from table_quizz_questions
             where deleted_at is null
-            order by RAND()
-            offset ?',
-            [$page - 1]
+            order by RAND()'
         );
     }
 }
