@@ -17,6 +17,10 @@ class UserSetting extends Model
         'mode'
     ];
 
+    public function getSetting($id){
+        return DB::select('select * from table_user_settings where user_id = ?', [$id]);
+    }
+
     public function setUserSetting($user_id, $mode = 0)
     {
         DB::update("INSERT INTO table_user_settings (user_id) VALUES (?) ON DUPLICATE KEY UPDATE mode=?;", [$user_id, $mode]);

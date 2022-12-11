@@ -13,16 +13,19 @@ class UserApiController extends Controller
     {
         $user = new User();
         $leaderboard = new LeaderBoard();
+        $setting = new UserSetting();
 
         $id = $request->get('user_id');
 
         $myLB = $leaderboard->GetByUserID($id);
+        $myST = $setting->getSetting($id);
         if(!empty($myLB)){
             return response()->json([
                 'status' => 200,
                 'data' => [
                     'user'=> $user->getById($id)[0],
                     'score'=>$myLB[0]->score,
+                    'mode'=>$myST[0]->mode
                 ],
             ], 200);
         }
@@ -32,6 +35,7 @@ class UserApiController extends Controller
             'data' => [
                 'user'=> $user->getById($id)[0],
                 'score'=> 0,
+                'mode'=>$myST[0]->mode,
             ],
         ], 200);
     }
