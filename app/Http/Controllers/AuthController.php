@@ -122,6 +122,7 @@ class AuthController extends Controller
         $factory = (new Factory)->withServiceAccount(env('PATH_FIREBASE_TOKEN'));
         $auth = $factory->createAuth();
         $now_seconds = time();
+        $setting = new UserSetting();
 
         $idToken = $request->header('authorization');
 
@@ -146,6 +147,8 @@ class AuthController extends Controller
                 "email" => $email,
                 "avatar" => $image,
             ]);
+
+            $setting->setUserSetting($user->id);
         }
 
         $payload = array(
