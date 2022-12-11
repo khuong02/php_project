@@ -17,12 +17,21 @@ class UserApiController extends Controller
         $id = $request->get('user_id');
 
         $myLB = $leaderboard->GetByUserID($id);
+        if(!empty($myLB)){
+            return response()->json([
+                'status' => 200,
+                'data' => [
+                    'user'=> $user->getById($id)[0],
+                    'score'=>$myLB[0]->score,
+                ],
+            ], 200);
+        }
 
         return response()->json([
             'status' => 200,
             'data' => [
                 'user'=> $user->getById($id)[0],
-                'score'=>$myLB[0]->score,
+                'score'=> 0,
             ],
         ], 200);
     }
@@ -34,9 +43,14 @@ class UserApiController extends Controller
             $id = $request->get('user_id');
             $data = $user->getById($id)[0];
 
-            $data->username = $request->get('username');
+            if($request->get('username') !== null){
+                $data->username = $request->get('username');
+            }
             $data->cost = $request->get('cost');
-            $data->avatar = $request->get('avatar');
+
+            if($request->get('avatar')!==null){
+                $data->avatar = $request->get('avatar');
+            }
 
             $user->updateUserName($data);
 
@@ -57,7 +71,7 @@ class UserApiController extends Controller
         try {
             $setting = new UserSetting();
             $id = $request->get('user_id');
-            $mode = $request->get('mode') | 0;
+            $mode = $request->get('mode') ?: 0;
 
             $setting->setUserSetting($id, $mode);
 
@@ -72,4 +86,25 @@ class UserApiController extends Controller
             ], 500);
         }
     }
+
+    public function buyCredit(Request $request){
+        try{
+        $id = $request->get('user_id');
+        $cost = $request->get('cost');
+
+        $user = new User();
+        $user->addCredit($id,$cost);
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Buy credit successfully!",
+        ], 200);
+        }catch(e)
+        {
+            return response()->json([
+                'status' => 400,
+                'message' => "Buy credit fail!"
+            ], 400);
+        }
+ }
 }

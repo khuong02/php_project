@@ -69,6 +69,7 @@ class QuestionController extends Controller
             $questions = $question->getListRankMode($page);
             $result = [];
 
+
             for ($i = 0; $i < count($questions); $i++) {
                 $data = [];
                 $answerData = $answer->getAnswerByQuestionId($questions[$i]->id);
