@@ -20,22 +20,12 @@ class UserApiController extends Controller
         $myLB = $leaderboard->GetByUserID($id);
         $myST = $setting->getSetting($id);
         if(!empty($myLB)){
-            if(!empty($myST)){
             return response()->json([
                 'status' => 200,
                 'data' => [
                     'user'=> $user->getById($id)[0],
                     'score'=>$myLB[0]->score,
                     'mode'=>$myST[0]->mode
-                ],
-            ], 200);
-            }
-            return response()->json([
-                'status' => 200,
-                'data' => [
-                    'user'=> $user->getById($id)[0],
-                    'score'=>$myLB[0]->score,
-                    'mode'=>0
                 ],
             ], 200);
         }
@@ -45,7 +35,7 @@ class UserApiController extends Controller
             'data' => [
                 'user'=> $user->getById($id)[0],
                 'score'=> 0,
-                'mode'=>0
+                'mode'=>$myST[0]->mode,
             ],
         ], 200);
     }
