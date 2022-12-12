@@ -62,7 +62,22 @@ class AccountAdminManagementController extends Controller
     public  function delete(Request $request, $id)
     {
         try {
-            if ($id == 1) {
+            $userAdmin = UserAdmin::where('id', $id)->first();
+            if ($userAdmin->email == env("EMAIL_ADMIN")) {
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'message' => 'You do not have permission to delete this account'
+                    ],
+                    400
+                );
+            }
+
+            $cookie = $request->cookie('token');
+            $private_key = env("JWT_SECRET");
+            $decodoJwt = $this->jwt->decodedJwt($cookie, $private_key);
+            $userAdmin = UserAdmin::where('id', $decodoJwt->uid)->first();
+            if ($userAdmin->email !== env('EMAIL_ADMIN')) {
                 return response()->json(
                     [
                         'status' => 400,
@@ -80,6 +95,7 @@ class AccountAdminManagementController extends Controller
                 200
             );
         } catch (\Throwable $th) {
+
             return response()->json(
                 [
                     'status' => 500,

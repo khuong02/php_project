@@ -2,10 +2,16 @@
 
 @section('title', 'Account Admin - Management')
 
-@section('vendor-script')
+
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
         integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css" rel="stylesheet" />
+@endsection
+
+@section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
 @endsection
 
@@ -76,6 +82,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <input type="hidden" name="deleteIdValue" value="" id="valueDelete" />
+                <input type="hidden" name="token2" value="{{ Cookie::get('token') }}" />
                 <div class="modal-body">
                     <div class="row">
                         <div class="col mb-3">
@@ -94,7 +101,7 @@
     <div class="card">
         <h5 class="card-header">Quản Lý Account User</h5>
         <div class="table-responsive text-nowrap">
-            <table class="table">
+            <table class="table" id="tableAccountManagemet">
                 <thead>
                     <tr>
                         <th>UserName</th>
@@ -109,10 +116,12 @@
             </table>
         </div>
     </div>
+
 @endsection
 
 @section('page-script')
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
+    <script src="https://pagination.js.org/dist/2.4.1/pagination.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
         integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -126,10 +135,15 @@
                     url: '/account/adminlist',
                     dataType: 'json',
                     success: function(resource) {
-                        $('tbody').html('');
-                        var appendata = '';
-                        $.each(resource.users, function(key, value) {
-                            appendata += `<tr>
+
+                        $('#tableAccountManagemet').pagination({
+                            dataSource: resource.users,
+                            pageSize: 6,
+                            formatResult: function(data) {},
+                            callback: function(data, pagination) {
+                                var appendata = '';
+                                $.each(data, function(key, value) {
+                                    appendata += `<tr>
                                 <td>
                                     <a href="/account/admin/update/${value.id}"><i
                                     class="fab fa-angular fa-lg text-danger me-3"></i><strong>${value.username}</strong></a>
@@ -144,8 +158,8 @@
                                     </ul>
                                 </td>
                                 `;
-                            if (value.deleted_at == null) {
-                                appendata += `
+                                    if (value.deleted_at == null) {
+                                        appendata += `
                                 <td>
                                     <span class="badge bg-label-primary me-1">Active</span>
                                 </td>
@@ -156,8 +170,8 @@
                                     </button>
                                 </td>
                                     `;
-                            } else {
-                                appendata += `
+                                    } else {
+                                        appendata += `
                                 <td>
                                     <span class="badge bg-label-warning me-1">InActive</span>
                                 </td>
@@ -168,8 +182,10 @@
                                     </button>
                                 </td>
                                     `;
+                                    }
+                                })
+                                $('tbody').html(appendata);
                             }
-                            $('tbody').html(appendata);
                         })
                     }
                 })
@@ -208,7 +224,7 @@
                         console.log(err);
                         $.toast({
                             heading: 'Error',
-                            text: responseJSON.message.name,
+                            text: err.responseJSON.message,
                             position: 'top-right',
                             icon: 'error',
                             stack: false
@@ -265,6 +281,13 @@
                         $("#createAccount").find('input').val("");
                         getUserData();
                     }
+                });
+            });
+
+            $("#seach").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tableAccountManagemet tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
         })
