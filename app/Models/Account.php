@@ -30,6 +30,10 @@ class Account extends Authenticatable implements JWTSubject
         return $this->email;
     }
 
+    public function updatePassword($email,$password){
+        return DB::update('update accounts set password = ? where email = ?', [$password,$email]);
+    }
+
     public function findAccountByEmail($email)
     {
         return DB::table('accounts')->where('email', $email)->first();

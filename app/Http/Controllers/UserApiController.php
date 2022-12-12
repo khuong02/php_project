@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\LeaderBoard;
+use App\Models\Account;
 use App\Models\UserSetting;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserApiController extends Controller
 {
@@ -110,5 +113,52 @@ class UserApiController extends Controller
                 'message' => "Buy credit fail!"
             ], 400);
         }
+ }
+ public function changePassword(Request $request){
+    try{
+        $validator = Validator::make($request->all(), [
+            'oldpassword'=>"required|min:6",
+            'newpassword' => 'required|min:6|required_with:cf_password|same:cf_password',
+            'cf_password' => 'required|min:6'
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => $validator->messages(),
+            ], 400);
+        }
+        $account = new Account();
+
+
+        $myAccount = $account->findAccountByEmail($request->email);
+
+        if(empty($myAccount)){
+            return response()->json([
+                "status"=>404,
+                "message"=>"You can't change password for this account!",
+            ], 404);
+        }
+
+        if (!Hash::check($request->oldpassword, $myAccount->password)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Password does not match',
+            ], 400);
+        }
+
+        $account->updatePassword($request->email,Hash::make($request->newpassword));
+
+        return response()->json([
+            'status'=>200,
+            'message'=>"Change password successfully!",
+        ], 200);
+    }catch(e){
+        return response()->json([
+            'status'=>404,
+            'message'=>e->messages(),
+        ], 404);
+    }
  }
 }
