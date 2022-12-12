@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
         integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css" rel="stylesheet" />
 @endsection
 
 @section('vendor-script')
@@ -106,10 +107,11 @@
             </table>
         </div>
     </div>
-    <script src="{{ asset('assets/js/jquery.js') }}"></script>
 @endsection
 
 @section('page-script')
+    <script src="{{ asset('assets/js/jquery.js') }}"></script>
+    <script src="https://pagination.js.org/dist/2.4.1/pagination.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
         integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -124,48 +126,52 @@
                     url: '/questionlist',
                     dataType: 'json',
                     success: function(res) {
-                        console.log(res);
                         $('tbody').html('');
                         $('#topic').html('');
                         $('#difficult').html('');
                         //Chèn dữ liệu từ database vào table
-                        var appenddata = '';
-                        $.each(res.questions, function(key, value) {
-                            appenddata += `
-                                <tr>
-                                    <td><a href="questions/update/${value.id}"><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>${value.question}</strong></a></td>
-                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i>${value.topic}</td>
-                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i>${value.difficult}</td>
-                            `;
-                            if (value.deleted_at == null) {
-                                appenddata += `
-                                    <td><span class="badge bg-label-primary me-1">Active</span></td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="${value.id}">
-                                            <i class="bx bx-trash me-1"></i>Delete</button></div>
-                                    </td>
-                                </tr>
-                                `;
-                            } else {
-                                appenddata += `
-                                    <td><span class="badge bg-label-warning me-1">Inactive</span></td>
-                                    <td>
-                                        <button type="button" disabled class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="${value.id}">
-                                            <i class="bx bx-trash me-1"></i>Delete</button></div>
-                                    </td>
-                                </tr>
-                                `;
+                        $('#tablequestion').pagination({
+                            dataSource: res.questions,
+                            pageSize: 6,
+                            formatResult: function(data) {},
+                            callback: function(data, pagination) {
+                                var appenddata = '';
+                                $.each(data, function(key, value) {
+                                    appenddata += `
+                                        <tr>
+                                            <td><a href="questions/update/${value.id}"><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>${value.question}</strong></a></td>
+                                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i>${value.topic}</td>
+                                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i>${value.difficult}</td>
+                                        `;
+                                    if (value.deleted_at == null) {
+                                        appenddata += `
+                                            <td><span class="badge bg-label-primary me-1">Active</span></td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="${value.id}">
+                                                <i class="bx bx-trash me-1"></i>Delete</button></div>
+                                            </td>
+                                            </tr>
+                                        `;
+                                    } else {
+                                        appenddata += `
+                                            <td><span class="badge bg-label-warning me-1">Inactive</span></td>
+                                            <td>
+                                                <button type="button" disabled class="btn btn-outline-danger" data-bs-toggle="modal" id="delete" data-bs-target="#deletequestion" data-id="${value.id}">
+                                                <i class="bx bx-trash me-1"></i>Delete</button></div>
+                                            </td>
+                                            </tr>
+                                            `;
+                                    }
+                                });
+                                $('tbody').html(appenddata);
                             }
-                        });
-
+                        })
                         //Chèn dữ liệu topic vào select topic
                         var optiontopic = '';
                         $.each(res.topics, function(key, value) {
                             optiontopic +=
                                 `<option value = "${value.id}">${value.name}</option>`;
                         });
-
-                        //Chèn dữ liệu difficult vào select difficult
                         var optiondiff = '';
                         $.each(res.difficults, function(key, value) {
                             optiondiff +=
@@ -173,14 +179,12 @@
                         });
                         $('#difficult').html(optiondiff);
                         $('#topic').html(optiontopic);
-                        $('tbody').html(appenddata);
                     },
                     error: function(err) {
                         console.log(err);
                     }
                 });
             }
-
             $(document).on("click", "#btnCreate", function(e) {
                 e.preventDefault();
                 var data = {
@@ -225,7 +229,6 @@
                 });
             });
 
-
             $(document).on("click", "#delete", function(e) {
                 var eventId = $(this).data('id');
                 $("#delid").val(eventId);
@@ -251,12 +254,9 @@
                             icon: 'success',
                             stack: false
                         });
-
                         $("#deletequestion").modal('hide');
                         $("#deletequestion").find('input').val("");
                         getQuestionData();
-
-
                     },
                     error: function(err) {
                         $.toast({
@@ -271,7 +271,12 @@
                     }
                 });
             });
+            $("#seach").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tablequestion tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
         });
     </script>
-
 @endsection
