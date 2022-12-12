@@ -28,6 +28,7 @@ Route::get('/users', [UserApiController::class, 'getProfile'])->middleware('myau
 Route::post('/users', [UserApiController::class, 'updateProfile'])->middleware('myauth');
 Route::post('/users/settings', [UserApiController::class, 'updateSetting'])->middleware('myauth');
 Route::post('/users/buycredit',[UserApiController::class,'buyCredit'])->middleware('myauth');
+Route::post('/users/changepass',[UserApiController::class,'changePassword'])->middleware('myauth');
 
 Route::get('/questions', [QuestionController::class, 'getQuestionAndAnswer'])->middleware('myauth');
 Route::get('/questionsrank', [QuestionController::class, 'getQuestionAndAnswerRankMode'])->middleware('myauth');
