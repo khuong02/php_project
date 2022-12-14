@@ -52,6 +52,7 @@ class Questions extends Controller
             $question->quizz_id = $request->input('quizz_id');
             $question->difficulty_id = $request->input('difficulty_id');
             $question->save();
+            $question->delete();
 
             return response()->json([
                 'status' => 201,

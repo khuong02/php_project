@@ -54,8 +54,9 @@ class User extends Authenticatable implements JWTSubject
         return DB::update('update users set username = ?, cost = ?,avatar = ? where id = ?', [$data->username, $data->cost, $data->avatar, $data->id]);
     }
 
-    public function addCredit($id,$cost){
-        return DB::update('update users set cost = cost + ? where id = ?', [$cost,$id]);
+    public function addCredit($id, $cost)
+    {
+        return DB::update('update users set cost = cost + ? where id = ?', [$cost, $id]);
     }
 
     public function getJWTIdentifier()
