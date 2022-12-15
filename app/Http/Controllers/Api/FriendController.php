@@ -36,7 +36,7 @@ class FriendController extends Controller
                     ]
                 );
             }
-            if ($checkAlreadyFriend[0]->status == 0) {
+            if (!empty($checkAlreadyFriend) && $checkAlreadyFriend[0]->status == 0) {
                 DB::update("update table_friends set status = 1 where user_id_first = ? and user_id_second = ? or user_id_first = ? and user_id_second = ?", [$user_id_first, $user_id_second, $user_id_second, $user_id_first]);
             }
             return response()->json(
@@ -50,7 +50,7 @@ class FriendController extends Controller
             return response()->json(
                 [
                     'status' => 500,
-                    'message' => 'serve erro'
+                    'message' => $th->getMessage()
                 ],
                 500
             );
@@ -160,17 +160,25 @@ class FriendController extends Controller
                     200
                 );
             }
-            $listUser = [];
             $user = new User();
+            $listResutl = [];
             foreach ($arrayIdFriend as $id_user) {
                 $userItem = $user->getById($id_user);
-                array_push($listUser, $userItem[0]);
+                $itemResutl = [
+                    "id" => $userItem[0]->id,
+                    "name" => $userItem[0]->username,
+                    "avatar" => $userItem[0]->avatar,
+                    "email" => $userItem[0]->email,
+                    "status" => 2
+                ];
+
+                array_push($listResutl, $itemResutl);
             }
 
             return response()->json(
                 [
                     'status' => 200,
-                    'listUser' => $listUser
+                    'listUser' => $listResutl
                 ],
                 200
             );
@@ -206,17 +214,25 @@ class FriendController extends Controller
                     200
                 );
             }
-            $listUser = [];
+            $listResutl = [];
             $user = new User();
             foreach ($arrayIdFriend as $id_user) {
                 $userItem = $user->getById($id_user);
-                array_push($listUser, $userItem[0]);
+                $itemResutl = [
+                    "id" => $userItem[0]->id,
+                    "name" => $userItem[0]->username,
+                    "avatar" => $userItem[0]->avatar,
+                    "email" => $userItem[0]->email,
+                    "status" => 1
+                ];
+
+                array_push($listResutl, $itemResutl);
             }
 
             return response()->json(
                 [
                     'status' => 200,
-                    'listUser' => $listUser
+                    'listUser' => $listResutl
                 ],
                 200
             );
@@ -258,37 +274,15 @@ class FriendController extends Controller
                     ];
                     array_push($listResutl, $itemResutl);
                 }
-                if (!empty($check)) {
-                    if ($check[0]->status == 0) {
-                        $itemResutl = [
-                            'id' => $itemUser->id,
-                            'name' => $itemUser->username,
-                            'avatar' => $itemUser->avatar,
-                            'email' => $itemUser->email,
-                            'status' => 0
-                        ];
-                        array_push($listResutl, $itemResutl);
-                    }
-                    // if ($check[0]->status == 1) {
-                    //     $itemResutl = [
-                    //         'id' => $itemUser->id,
-                    //         'name' => $itemUser->username,
-                    //         'avatar' => $itemUser->avatar,
-                    //         'email' => $itemUser->email,
-                    //         'status' => 1
-                    //     ];
-                    //     array_push($listResutl, $itemResutl);
-                    // }
-                    // if ($check[0]->status == 2) {
-                    //     $itemResutl = [
-                    //         'id' => $itemUser->id,
-                    //         'name' => $itemUser->username,
-                    //         'avatar' => $itemUser->avatar,
-                    //         'email' => $itemUser->email,
-                    //         'status' => 2
-                    //     ];
-                    //     array_push($listResutl, $itemResutl);
-                    // }
+                if (!empty($check) && $check[0]->status == 0) {
+                    $itemResutl = [
+                        'id' => $itemUser->id,
+                        'name' => $itemUser->username,
+                        'avatar' => $itemUser->avatar,
+                        'email' => $itemUser->email,
+                        'status' => 0
+                    ];
+                    array_push($listResutl, $itemResutl);
                 }
             }
             return response()->json(

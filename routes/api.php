@@ -58,12 +58,3 @@ Route::controller(FriendController::class)->group(function () {
     Route::post('/unFriend', 'unFriend')->middleware('myauth');
     Route::post('/respond2invitation', 'respond2FriendRequest')->middleware('myauth');
 });
-
-// Route::post('/addFriend', [FriendController::class, 'addFriend'])->middleware('myauth');
-// Route::post('/respond2invitation', [FriendController::class, 'respond2FriendRequest'])->middleware('myauth');
-// Route::post('/unFriend', [FriendController::class, 'unFriend'])->middleware('myauth');
-// Route::get('/get-list-friend', [FriendController::class, 'getListFriend'])->middleware('myauth');
-// Route::get('/get-list-pending', [FriendController::class, 'getListFriendPending'])->middleware('myauth');
-
-
-// Route::get('/get-list-stranger', [FriendController::class, 'getUserStranger'])->middleware('myauth');
