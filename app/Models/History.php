@@ -19,9 +19,9 @@ class History extends Model
         'score'
     ];
 
-    public function getByUserID($id)
+    static function getByUserID($id)
     {
-        return DB::select("SELECT * FROM table_histories WHERE user_id = ?", [$id]);
+        return DB::select("SELECT * FROM table_histories where user_id = ? order by created_at desc limit 10;", [$id]);
     }
 
     static function set($data)

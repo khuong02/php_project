@@ -23,6 +23,21 @@ class LeaderBoardController extends Controller
             $leaderboard = new LeaderBoard();
 
             $old_data = $leaderboard->GetByUserID($id);
+
+            $data = [
+                "userID" => $id,
+                "score" => $score,
+                "quantity" => $quantity,
+                "time" => $time
+            ];
+            History::create(
+                [
+                    'user_id' => $data['userID'],
+                    'time' => $data['time'],
+                    'quantity' => $data['quantity'],
+                    'score' => $data['score']
+                ]
+            );
             if (count($old_data) > 0 && $old_data[0]->score > $score) {
                 return response()->json([
                     'status' => 200,
@@ -44,15 +59,7 @@ class LeaderBoardController extends Controller
                 ], 200);
             }
 
-            $data = [
-                "userID" => $id,
-                "score" => $score,
-                "quantity" => $quantity,
-                "time" => $time
-            ];
             $leaderboard->Set($data);
-
-            History::set($data);
 
             return response()->json([
                 'status' => 200,
