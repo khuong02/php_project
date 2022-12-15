@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Models\Friend;
 use Illuminate\Support\Facades\Route;
 use Cloudinary\Transformation\Rotate;
 use App\Http\Controllers\AuthController;
@@ -10,9 +11,9 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserAdminController;
 use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\LeaderBoardController;
+use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\PasswordResetRequestController;
-use App\Models\Friend;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,3 +59,5 @@ Route::controller(FriendController::class)->group(function () {
     Route::post('/unFriend', 'unFriend')->middleware('myauth');
     Route::post('/respond2invitation', 'respond2FriendRequest')->middleware('myauth');
 });
+
+Route::get('/history', [HistoryController::class, 'getListHistory'])->middleware('myauth');
