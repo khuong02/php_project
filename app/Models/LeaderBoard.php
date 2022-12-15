@@ -30,11 +30,11 @@ class LeaderBoard extends Model
 
     function getList()
     {
-        $query = "SELECT user_id,php_project.leaderboard.time , quantity,score, username,email, avatar
-        FROM php_project.leaderboard
-        INNER JOIN php_project.users
-        where user_id = php_project.users.id
-        order by score desc, quantity, php_project.leaderboard.time
+        $query = "SELECT user_id,leaderboard.time , quantity,score, username,email, avatar
+        FROM leaderboard
+        INNER JOIN users
+        where user_id = users.id
+        order by score desc, quantity, leaderboard.time
         limit 10;";
         return DB::select($query);
     }

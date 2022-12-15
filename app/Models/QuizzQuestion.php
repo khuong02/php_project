@@ -38,7 +38,8 @@ class QuizzQuestion extends Model
         );
     }
 
-    public function getListRankMode($page){
+    public function getListRankMode($page)
+    {
         return DB::select(
             'select *
             from table_quizz_questions

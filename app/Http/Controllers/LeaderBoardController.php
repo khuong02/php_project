@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\LeaderBoard;
 use Illuminate\Http\Request;
 
@@ -50,6 +51,8 @@ class LeaderBoardController extends Controller
                 "time" => $time
             ];
             $leaderboard->Set($data);
+
+            History::set($data);
 
             return response()->json([
                 'status' => 200,
