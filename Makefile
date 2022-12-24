@@ -1,7 +1,7 @@
 run:
 	@php artisan serve
 
-send:
+seed:
 	@php artisan db:seed
 
 ngrok:
